@@ -1,0 +1,2 @@
+
+79a509b81a4fd38320dc6525ac777f4294f6ef2d	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/ngrok","integrity":null,"time":1761212211195,"size":"262","metadata":{"time":1761212211194,"url":"http://registry.npm.taobao.org/ngrok","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Thu, 23 Oct 2025 09:36:51 GMT","location":"https://registry.npmmirror.com/ngrok"},"options":{"compress":true},"status":301}}

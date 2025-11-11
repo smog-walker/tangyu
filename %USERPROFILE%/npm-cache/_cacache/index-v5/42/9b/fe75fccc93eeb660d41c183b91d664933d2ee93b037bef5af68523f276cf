@@ -1,0 +1,2 @@
+
+bb7d48ae57f6d5e80eee7b381d9731aa6fce1381	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/braces","integrity":null,"time":1760193356114,"size":"262","metadata":{"time":1760193356113,"url":"http://registry.npm.taobao.org/braces","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Sat, 11 Oct 2025 14:35:55 GMT","location":"https://registry.npmmirror.com/braces"},"options":{"compress":true},"status":301}}

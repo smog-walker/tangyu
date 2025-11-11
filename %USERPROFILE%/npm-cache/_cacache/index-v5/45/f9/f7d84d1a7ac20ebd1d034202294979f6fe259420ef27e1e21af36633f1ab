@@ -1,0 +1,2 @@
+
+099c04426714ba649ac3a5043e44c16f441f3331	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/buffer-crc32","integrity":null,"time":1761212212082,"size":"262","metadata":{"time":1761212212082,"url":"http://registry.npm.taobao.org/buffer-crc32","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Thu, 23 Oct 2025 09:36:52 GMT","location":"https://registry.npmmirror.com/buffer-crc32"},"options":{"compress":true},"status":301}}

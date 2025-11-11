@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>糖域卫士 - 公共访问说明</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #1890ff;
+        }
+        .access-method {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        code {
+            background-color: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .steps {
+            padding-left: 20px;
+        }
+        .steps li {
+            margin: 10px 0;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #1890ff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #40a9ff;
+        }
+        .video-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>糖域卫士系统 - 公共访问说明</h1>
+    
+    <div class="access-method">
+        <h2>方法一：本地访问（推荐）</h2>
+        <p>在您的电脑上已经运行着糖域卫士服务器，您可以通过以下方式访问：</p>
+        <ul class="steps">
+            <li>打开浏览器</li>
+            <li>在地址栏输入：<code>http://localhost:3000/tangyu.html</code></li>
+            <li>按下回车键即可访问</li>
+        </ul>
+        <a href="http://localhost:3000/tangyu.html" class="btn" target="_blank">立即访问本地系统</a>
+    </div>
+    
+    <div class="access-method">
+        <h2>方法二：使用内网穿透服务（需要自行配置）</h2>
+        <p>如果您希望从外部网络访问，可以使用以下内网穿透工具：</p>
+        
+        <h3>方案1：使用frp（免费开源）</h3>
+        <div class="warning">
+            <strong>注意：</strong>使用frp需要您有自己的公网服务器或云服务器，如果没有，可以尝试其他方案。
+        </div>
+        <p>配置步骤（简略）：</p>
+        <ol class="steps">
+            <li>在公网服务器上下载并配置frps（服务端）</li>
+            <li>在本地电脑下载frpc（客户端）</li>
+            <li>修改frpc配置文件，指向您的公网服务器，并映射3000端口</li>
+            <li>启动frpc客户端连接到您的公网服务器</li>
+        </ol>
+        
+        <h3>方案2：使用花生壳等付费服务</h3>
+        <p>您也可以考虑使用花生壳、natapp等商业内网穿透服务，这些服务通常提供免费或低成本的方案，适合个人使用。</p>
+    </div>
+    
+    <div class="access-method">
+        <h2>方法三：部署到云服务器</h2>
+        <p>如果您有云服务器账号，可以将糖域卫士系统部署到云服务器上：</p>
+        <ol class="steps">
+            <li>将项目文件上传到云服务器</li>
+            <li>安装Node.js环境</li>
+            <li>运行<code>npm install</code>安装依赖</li>
+            <li>运行<code>npm start</code>启动服务器</li>
+            <li>使用服务器IP地址或域名访问系统</li>
+        </ol>
+    </div>
+    
+    <div class="warning">
+        <h3>安全提示：</h3>
+        <p>1. 公共访问可能会暴露您的系统给未知用户，请确保做好适当的安全措施</p>
+        <p>2. 不要在生产环境中使用弱密码或默认配置</p>
+        <p>3. 考虑添加访问控制或防火墙规则限制访问</p>
+    </div>
+    
+    <p>如有任何问题，请联系系统管理员或技术支持。</p>
+</body>
+</html>

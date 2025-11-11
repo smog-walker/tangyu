@@ -1,0 +1,2 @@
+
+7540535c28690715daaa4bf092d7e23afd409d33	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/pstree.remy","integrity":null,"time":1760193355459,"size":"262","metadata":{"time":1760193355459,"url":"http://registry.npm.taobao.org/pstree.remy","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Sat, 11 Oct 2025 14:35:55 GMT","location":"https://registry.npmmirror.com/pstree.remy"},"options":{"compress":true},"status":301}}

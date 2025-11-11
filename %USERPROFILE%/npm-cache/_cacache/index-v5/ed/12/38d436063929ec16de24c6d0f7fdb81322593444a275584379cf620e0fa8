@@ -1,0 +1,2 @@
+
+76aec8590f3c66438f68b6c6fbda579bba2d5704	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/destroy","integrity":null,"time":1760193354866,"size":"262","metadata":{"time":1760193354866,"url":"http://registry.npm.taobao.org/destroy","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Sat, 11 Oct 2025 14:35:54 GMT","location":"https://registry.npmmirror.com/destroy"},"options":{"compress":true},"status":301}}

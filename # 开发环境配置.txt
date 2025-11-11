@@ -1,0 +1,6 @@
+# 开发环境配置
+NODE_ENV=development
+PORT=3000
+
+# MongoDB连接字符串（请根据你的设置修改）
+MONGODB_URI=mongodb://用户名:密码@localhost:27017/数据库名?authSource=admin

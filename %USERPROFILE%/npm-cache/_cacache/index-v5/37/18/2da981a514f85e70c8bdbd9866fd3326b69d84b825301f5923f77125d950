@@ -1,0 +1,2 @@
+
+b93732b7114ba7e41a7b73efe3b60d1d99e14dc5	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/unpipe","integrity":null,"time":1760193354863,"size":"262","metadata":{"time":1760193354863,"url":"http://registry.npm.taobao.org/unpipe","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Sat, 11 Oct 2025 14:35:54 GMT","location":"https://registry.npmmirror.com/unpipe"},"options":{"compress":true},"status":301}}

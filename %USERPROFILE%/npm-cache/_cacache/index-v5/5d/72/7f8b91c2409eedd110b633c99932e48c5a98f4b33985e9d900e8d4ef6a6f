@@ -1,0 +1,2 @@
+
+80e15a7aca2ee8f420e1ed6379e6018edd9ce352	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/mimic-response","integrity":null,"time":1761212212937,"size":"262","metadata":{"time":1761212212937,"url":"http://registry.npm.taobao.org/mimic-response","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Thu, 23 Oct 2025 09:36:53 GMT","location":"https://registry.npmmirror.com/mimic-response"},"options":{"compress":true},"status":301}}

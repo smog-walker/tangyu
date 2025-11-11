@@ -1,0 +1,2 @@
+
+8d268045664dd84ffa02ba2550ce99b6ef6c78ac	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/end-of-stream","integrity":null,"time":1761212212754,"size":"262","metadata":{"time":1761212212754,"url":"http://registry.npm.taobao.org/end-of-stream","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Thu, 23 Oct 2025 09:36:53 GMT","location":"https://registry.npmmirror.com/end-of-stream"},"options":{"compress":true},"status":301}}

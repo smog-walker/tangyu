@@ -1,0 +1,2 @@
+
+2f25c9faae0437b7b104266909c4fda48fe45ad9	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/touch","integrity":null,"time":1760193355457,"size":"262","metadata":{"time":1760193355457,"url":"http://registry.npm.taobao.org/touch","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Sat, 11 Oct 2025 14:35:55 GMT","location":"https://registry.npmmirror.com/touch"},"options":{"compress":true},"status":301}}

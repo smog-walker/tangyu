@@ -1,0 +1,2 @@
+
+0b2308d02f02cbb8b2f3bb47ceef7ddc88f44b15	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/range-parser","integrity":null,"time":1760193355224,"size":"262","metadata":{"time":1760193355224,"url":"http://registry.npm.taobao.org/range-parser","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Sat, 11 Oct 2025 14:35:54 GMT","location":"https://registry.npmmirror.com/range-parser"},"options":{"compress":true},"status":301}}

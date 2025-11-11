@@ -1,0 +1,2 @@
+
+5e5b81511b96c5f44e10224532acaffa5bc9f630	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/quick-lru","integrity":null,"time":1761212212938,"size":"262","metadata":{"time":1761212212938,"url":"http://registry.npm.taobao.org/quick-lru","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Thu, 23 Oct 2025 09:36:53 GMT","location":"https://registry.npmmirror.com/quick-lru"},"options":{"compress":true},"status":301}}

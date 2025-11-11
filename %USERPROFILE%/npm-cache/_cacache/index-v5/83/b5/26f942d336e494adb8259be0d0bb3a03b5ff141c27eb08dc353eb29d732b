@@ -1,0 +1,2 @@
+
+0f34d3f82dabab2b4902ae39426e1324492d22db	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/dotenv","integrity":null,"time":1760251848591,"size":"262","metadata":{"time":1760251848591,"url":"http://registry.npm.taobao.org/dotenv","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Sun, 12 Oct 2025 06:50:48 GMT","location":"https://registry.npmmirror.com/dotenv"},"options":{"compress":true},"status":301}}

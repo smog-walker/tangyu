@@ -1,0 +1,44 @@
+// ... existing code ...
+            try {
+                // 使用API客户端进行登录
+                console.log('开始登录流程...');
+                const result = await apiClient.loginUser(username, password);
+                
+                console.log('登录API返回结果:', result);
+                
+                if (result && result.success) {
+                    // 确保使用API返回的真实用户ID
+                    const userData = result.user;
+                    if (!userData.id) {
+                        // 如果API没有返回ID，生成一个符合格式的模拟ID
+                        userData.id = 'demo-' + Date.now().toString().padStart(20, '0');
+                    }
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(userData));
+                    
+                    console.log('登录成功，已保存用户信息:', userData);
+                    
+                    // 跳转到主页面
+                    window.location.href = 'tangyu.html';
+                } else {
+                    alert(result?.message || '登录失败，请检查用户名和密码');
+                }
+            } catch (error) {
+                console.error('登录过程发生错误:', error);
+                // 如果API调用失败，使用模拟登录
+                console.log('API调用失败，使用模拟登录');
+                
+                const userData = {
+                    id: 'demo-' + Date.now().toString().padStart(20, '0'), // 生成24位格式的ID
+                    username: username,
+                    email: username + '@example.com',
+                    lastLogin: new Date().toISOString()
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                console.log('模拟登录成功，已保存用户信息:', userData);
+                
+                // 跳转到主页面
+                window.location.href = 'tangyu.html';
+            }
+// ... existing code ...

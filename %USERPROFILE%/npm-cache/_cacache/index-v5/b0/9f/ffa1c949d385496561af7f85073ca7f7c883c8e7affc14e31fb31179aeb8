@@ -1,0 +1,2 @@
+
+5571ef3cfb3a9035d9e247f55a21f732868cf0f9	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/content-disposition","integrity":null,"time":1760193355034,"size":"262","metadata":{"time":1760193355034,"url":"http://registry.npm.taobao.org/content-disposition","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Sat, 11 Oct 2025 14:35:54 GMT","location":"https://registry.npmmirror.com/content-disposition"},"options":{"compress":true},"status":301}}

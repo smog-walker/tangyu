@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 糖域卫士</title>
+    <script src="apiClient.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+        }
+        
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f2f5;
+        }
+        
+        .login-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1890ff;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e8f4ff;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .login-button:hover {
+            background-color: #40a9ff;
+        }
+        
+        .login-button:active {
+            background-color: #096dd9;
+        }
+        
+        .demo-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f6ffed;
+            border: 1px solid #b7eb8f;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #52c41a;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">糖域卫士</div>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">账号</label>
+                <input type="text" id="username" placeholder="请输入账号" required>
+            </div>
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" placeholder="请输入密码" required>
+            </div>
+            <button type="submit" class="login-button">登录</button>
+        </form>
+        
+        <div class="demo-info">
+            <strong>演示信息：</strong><br>
+            您可以输入任意用户名和密码进行登录演示
+        </div>
+    </div>
+
+    <script>
+        // 登录表单处理
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // 简单的表单验证
+            if (!username.trim() || !password.trim()) {
+                alert('请输入账号和密码');
+                return;
+            }
+            
+            // 显示加载状态
+            const loginButton = this.querySelector('button[type="submit"]');
+            loginButton.disabled = true;
+            loginButton.textContent = '登录中...';
+            
+            try {
+                // 使用API客户端进行登录
+                console.log('开始登录流程...');
+                const result = await apiClient.loginUser(username, password);
+                
+                console.log('登录API返回结果:', result);
+                
+                if (result && result.success) {
+                    // 登录成功，保存完整的用户信息
+                    const userData = result.user || { 
+                        id: 'demo-' + Date.now(),
+                        username: username,
+                        email: username + '@example.com'
+                    };
+                    localStorage.setItem('currentUser', JSON.stringify(userData));
+                    
+                    console.log('登录成功，已保存用户信息:', userData);
+                    
+                    // 跳转到主页面
+                    window.location.href = 'tangyu.html';
+                } else {
+                    alert(result?.message || '登录失败，请检查用户名和密码');
+                }
+            } catch (error) {
+                console.error('登录过程发生错误:', error);
+                // 如果API调用失败，使用模拟登录
+                console.log('API调用失败，使用模拟登录');
+                
+                const userData = {
+                    id: 'demo-' + Date.now(),
+                    username: username,
+                    email: username + '@example.com',
+                    lastLogin: new Date().toISOString()
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                console.log('模拟登录成功，已保存用户信息:', userData);
+                
+                // 跳转到主页面
+                window.location.href = 'tangyu.html';
+            } finally {
+                // 恢复按钮状态
+                loginButton.disabled = false;
+                loginButton.textContent = '登录';
+            }
+        });
+        
+        // 为输入框添加键盘事件支持
+        document.getElementById('username').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('password').focus();
+            }
+        });
+        
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+        
+        // 自动填充演示账号（可选）
+        document.addEventListener('DOMContentLoaded', function() {
+            // 可以在这里设置默认的演示账号
+            // document.getElementById('username').value = 'demo';
+            // document.getElementById('password').value = 'demo123';
+        });
+    </script>
+</body>
+</html>

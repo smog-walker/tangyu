@@ -1,0 +1,77 @@
+# 依赖
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# 环境变量文件
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 构建输出
+dist
+dist-ssr
+build
+*.local
+
+# 编辑器和IDE配置
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 日志文件
+*.log
+logs
+
+# 临时文件
+*.tmp
+*.temp
+.cache
+
+# OS生成的文件
+Thumbs.db
+.DS_Store
+
+# 测试覆盖率
+coverage
+*.lcov
+.nyc_output
+
+# 生产环境配置
+production.env
+production.env.local
+
+# 脚本文件（Windows）
+*.bat
+*.cmd
+
+# 脚本文件（Unix/Linux）
+*.sh
+*.bash
+*.zsh
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+
+# 压缩文件
+*.zip
+*.tar.gz
+*.rar
+
+# 其他
+*.pem
+.env.example
+.vercel

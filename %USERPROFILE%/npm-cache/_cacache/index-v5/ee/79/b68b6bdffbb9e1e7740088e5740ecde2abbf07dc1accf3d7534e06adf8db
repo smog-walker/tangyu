@@ -1,0 +1,2 @@
+
+f69e4698ee8fd2d796b50431df867a51b3a126fe	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/cors","integrity":null,"time":1760193354334,"size":"262","metadata":{"time":1760193354334,"url":"http://registry.npm.taobao.org/cors","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Sat, 11 Oct 2025 14:35:54 GMT","location":"https://registry.npmmirror.com/cors"},"options":{"compress":true},"status":301}}
