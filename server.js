@@ -326,6 +326,98 @@ app.get('/api/ai-report/:userId/:period', async (req, res) => {
     }
 });
 
+// 社区帖子API端点 - 修复：添加缺失的API端点
+app.get('/api/community/posts', async (req, res) => {
+    try {
+        // 返回模拟的社区帖子数据
+        res.json({
+            success: true,
+            data: [
+                {
+                    id: 'post-1',
+                    title: '糖尿病饮食控制经验分享',
+                    content: '我通过控制碳水摄入和定时进餐，血糖控制得很好...',
+                    author: '糖友小王',
+                    createdAt: new Date().toISOString(),
+                    comments: 5,
+                    likes: 12
+                },
+                {
+                    id: 'post-2', 
+                    title: '运动对血糖控制的重要性',
+                    content: '每天坚持30分钟有氧运动，血糖明显改善...',
+                    author: '健康达人',
+                    createdAt: new Date(Date.now() - 86400000).toISOString(),
+                    comments: 3,
+                    likes: 8
+                }
+            ]
+        });
+    } catch (error) {
+        console.error('获取社区帖子错误:', error);
+        res.status(500).json({
+            success: false,
+            message: '服务器内部错误'
+        });
+    }
+});
+
+// 获取帖子详情
+app.get('/api/community/posts/:postId', async (req, res) => {
+    try {
+        const { postId } = req.params;
+        res.json({
+            success: true,
+            data: {
+                id: postId,
+                title: '模拟帖子标题',
+                content: '这是模拟的帖子内容...',
+                author: '模拟用户',
+                createdAt: new Date().toISOString(),
+                comments: [
+                    {
+                        id: 'comment-1',
+                        user: '用户A',
+                        content: '很好的分享！',
+                        createdAt: new Date().toISOString()
+                    }
+                ]
+            }
+        });
+    } catch (error) {
+        console.error('获取帖子详情错误:', error);
+        res.status(500).json({
+            success: false,
+            message: '服务器内部错误'
+        });
+    }
+});
+
+// 添加帖子评论
+app.post('/api/community/posts/:postId/comments', async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const { userId, content } = req.body;
+        
+        res.json({
+            success: true,
+            message: '评论添加成功',
+            data: {
+                id: 'new-comment-' + Date.now(),
+                user: '当前用户',
+                content: content,
+                createdAt: new Date().toISOString()
+            }
+        });
+    } catch (error) {
+        console.error('添加评论错误:', error);
+        res.status(500).json({
+            success: false,
+            message: '服务器内部错误'
+        });
+    }
+});
+
 // 修改服务器启动部分
 const PORT = process.env.PORT || 3000;
 

@@ -776,7 +776,7 @@
             background-color: var(--light-color);
             padding: 20px;
             border-radius: 8px;
-            margin-top: 20px;
+margin-top: 20px;
         }
         
         #feedback form .form-group {
@@ -1106,8 +1106,7 @@
             .small-images {
                 grid-template-columns: repeat(2, 1fr);
             }
-
-        @media (max-width: 768px) {
+@media (max-width: 768px) {
             .record-grid {
                 grid-template-columns: 1fr;
             }
@@ -1263,7 +1262,7 @@ color: var(--dark-color);
         }
 
         .message-time {
-            font-size: 12px;
+font-size: 12px;
 color: var(--gray-color);
             margin-top: 4px;
             text-align: right;
@@ -1374,7 +1373,6 @@ position: relative;
             outline: none;
             box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
         }
-
         #send-message {
             padding: 12px 20px;
             border-radius: 20px;
@@ -1852,18 +1850,17 @@ position: relative;
         </div>
         <!-- AI周报 -->
                 <div class="tab-content active" id="weekly-report">
+                    <!-- 在AI个性化分析部分，修复图片路径 -->
                     <div class="report-container">
-                        <div class="report-card">
-                            <div class="report-header">
-                                <div class="report-title">血糖控制周报</div>
-                                <div class="report-date">2023年6月第3周</div>
-                            </div>
-                            <div class="chart-container">
-                                <img src="images/blood-sugar-trend.jpg" alt="血糖趋势图">
-                            </div>
-                            <div class="report-content">
-                                <p>本周您的平均血糖值为 <span class="bg-normal">128 mg/dL</span>，处于理想范围内。</p>
-                                <p>与上周相比，您的血糖稳定性有所提高，波动范围缩小了15%。</p>
+                        <!-- 修复图片路径 -->
+                        <img src="images/blood-sugar-trend.jpg" alt="血糖趋势图" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+                        <!-- 或者使用base64编码的占位图片 -->
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuWKoOi9veWbvuWDj+W5suWHuuWPsyDlm77lg488L3RleHQ+Cjwvc3ZnPg==" alt="血糖趋势图占位符" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+                    </div>
+                    </div>
+                    <div class="report-content">
+                        <p>本周您的平均血糖值为 <span class="bg-normal">128 mg/dL</span>，处于理想范围内。</p>
+                        <p>与上周相比，您的血糖稳定性有所提高，波动范围缩小了15%。</p>
                                 <p>建议：继续保持良好的饮食和运动习惯，注意监测餐后血糖。</p>
                             </div>
                             <div class="report-actions">
@@ -2536,7 +2533,7 @@ position: relative;
                 </form>
             </div>
         </div>
-    </div>
+</div>
 
 
     <!-- 登录状态管理和权限控制 -->
@@ -2798,42 +2795,15 @@ position: relative;
                 });
             });
 
-            // 填充个人信息表单
+            // 填充个人信息表单 - 修复：移到全局作用域
             function populateProfileForm() {
-                // 确保API客户端在页面加载时可用
-                document.addEventListener('DOMContentLoaded', function(){
-                    // 检查并初始化API客户端
-                    if (!window.apiClient) {
-                        console.warn('API客户端未初始化，尝试重新初始化');
-                        try {
-                            window.apiClient = new APIClient();
-                            console.log('API客户端初始化成功');
-                        } catch (error) {
-                            console.error('API客户端初始化失败:', error);
-                        }
+                const userData = JSON.parse(localStorage.getItem('currentUser'));
+                if (userData) {
+                    const currentUsernameInput = document.getElementById('current-username');
+                    if (currentUsernameInput) {
+                        currentUsernameInput.value = userData.username || '';
                     }
-                    
-                    // 确保populateProfileForm函数可用
-                    if (typeof window.populateProfileForm === 'undefined') {
-                        window.populateProfileForm = function() {
-                            const userData = JSON.parse(localStorage.getItem('currentUser'));
-                            if (userData) {
-                                const currentUsernameInput = document.getElementById('current-username');
-                                if (currentUsernameInput) {
-                                    currentUsernameInput.value = userData.username || '';
-                                }
-                            }
-                        };
-                    }
-                    
-                    const userData = JSON.parse(localStorage.getItem('currentUser'));
-                    if (userData) {
-                        const currentUsernameInput = document.getElementById('current-username');
-                        if (currentUsernameInput) {
-                            currentUsernameInput.value = userData.username || '';
-                        }
-                    }
-                });
+                }
             }
 
             // 检查初始登录状态

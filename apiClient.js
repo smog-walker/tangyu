@@ -100,7 +100,7 @@ class APIClient {
             return await this.request('/api/community/posts');
         } catch (error) {
             console.error('获取社区帖子失败:', error);
-            // 返回模拟数据用于演示
+            // 返回模拟数据用于演示 - 修复：确保返回正确的数据结构
             return {
                 success: true,
                 data: [
