@@ -790,7 +790,7 @@ margin-top: 20px;
             color: var(--secondary-color);
         }
         
-        #feedback form select,
+#feedback form select,
         #feedback form textarea {
             width: 100%;
             padding: 10px;
@@ -814,8 +814,7 @@ margin-top: 20px;
             font-size: 14px;
             transition: var(--transition);
         }
-        
-        #feedback form button[type="submit"]:hover:not(:disabled) {
+#feedback form button[type="submit"]:hover:not(:disabled) {
             background-color: var(--secondary-color);
         }
         
@@ -850,10 +849,9 @@ margin-top: 20px;
             padding: 40px;
             color: var(--gray-color);
         }
-
-        /* 社区样式 */
-        .community-container {
-            display: flex;
+/* 社区样式 */
+.community-container {
+display: flex;
             flex-direction: column;
             gap: 25px;
         }
@@ -1114,8 +1112,7 @@ margin-top: 20px;
             .professional-container {
                 grid-template-columns: 1fr;
             }
-
-            .form-actions {
+.form-actions {
                 flex-direction: column;
             }
 
@@ -1141,246 +1138,7 @@ margin-top: 20px;
             .tab-buttons {
                 flex-direction: column;
             }
-        }
-
-        /* 血糖值颜色指示 */
-        .bg-low {
-            color: var(--accent-color);
-            font-weight: bold;
-        }
-
-        .bg-normal {
-            color: var(--success-color);
-            font-weight: bold;
-        }
-
-        .bg-high {
-            color: var(--warning-color);
-            font-weight: bold;
-        }
-    </style>
-    <style>
-        /* AI聊天样式 */
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 70vh;
-            max-height: 700px;
-            border: 1px solid var(--light-gray);
-            border-radius: 12px;
-            overflow: hidden;
-            background-color: var(--white);
-            box-shadow: var(--shadow);
-        }
-
-        .chat-header {
-            padding: 15px 20px;
-            background-color: var(--primary-color);
-            color: var(--white);
-            border-bottom: 1px solid var(--light-gray);
-        }
-
-        .chat-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .chat-subtitle {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .message {
-            display: flex;
-            max-width: 80%;
-        }
-
-        .user-message {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
-
-        .ai-message {
-            align-self: flex-start;
-        }
-
-        .message-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .user-message .message-avatar {
-            background-color: var(--primary-color);
-            color: white;
-            margin-left: 10px;
-        }
-
-        .ai-message .message-avatar {
-            background-color: var(--light-gray);
-            margin-right: 10px;
-        }
-
-        .message-content {
-            flex: 1;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .message-text {
-            padding: 12px 16px;
-            border-radius: 18px;
-            line-height: 1.5;
-            word-wrap: break-word;
-        }
-
-        .user-message .message-text {
-            background-color: var(--primary-color);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-
-        .ai-message .message-text {
-            background-color: var(--light-gray);
-color: var(--dark-color);
-            border-bottom-left-radius: 4px;
-        }
-
-        .message-time {
-font-size: 12px;
-color: var(--gray-color);
-            margin-top: 4px;
-            text-align: right;
-        }
-        
-        .message {
-position: relative;
-        }
-        
-        .delete-message-btn {
-            position: absolute;
-            bottom: 5px;
-            right: -30px;
-            background: none;
-            border: none;
-            color: rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            font-size: 14px;
-            opacity: 0;
-            transition: opacity 0.2s, color 0.2s;
-            z-index: 5;
-            padding: 2px;
-            border-radius: 4px;
-        }
-        
-        .message:hover .delete-message-btn {
-            opacity: 1;
-        }
-        
-        .delete-message-btn:hover {
-            color: var(--accent-color);
-            background-color: rgba(255, 255, 255, 0.8);
-        }
-
-        .user-message .message-time {
-            text-align: right;
-        }
-
-        .ai-message .message-time {
-            text-align: left;
-        }
-
-        .chat-input-container {
-            border-top: 1px solid var(--light-gray);
-            padding: 15px;
-            background-color: var(--light-color);
-        }
-
-        .quick-questions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .quick-question {
-            padding: 8px 12px;
-            background-color: var(--white);
-            border: 1px solid var(--light-gray);
-            border-radius: 20px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .quick-question:hover {
-            background-color: var(--primary-color);
-            color: var(--white);
-            border-color: var(--primary-color);
-        }
-
-        .chat-input-wrapper {
-            display: flex;
-            gap: 10px;
-            align-items: flex-end;
-        }
-
-        .upload-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            padding: 8px;
-            color: var(--accent-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .upload-btn:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-            border-radius: 4px;
-        }
-
-        #chat-input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 1px solid var(--light-gray);
-            border-radius: 20px;
-            resize: none;
-            font-size: 15px;
-            max-height: 120px;
-            transition: var(--transition);
-        }
-
-        #chat-input:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
-        }
-        #send-message {
-            padding: 12px 20px;
-            border-radius: 20px;
-            white-space: nowrap;
-        }
-
-
-        /* 响应式设计 */
+        } /* 响应式设计 */
         @media (max-width: 768px) {
             .message {
                 max-width: 90%;
@@ -1389,129 +1147,10 @@ position: relative;
             .quick-questions {
                 flex-direction: column;
             }
-
+            
             .quick-question {
                 text-align: center;
             }
-        }
-
-        /* 打字指示器 */
-        .typing-indicator {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            background-color: var(--light-gray);
-            border-radius: 18px;
-            border-bottom-left-radius: 4px;
-            max-width: 80px;
-        }
-
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--gray-color);
-            border-radius: 50%;
-            margin: 0 2px;
-            animation: typing 1.4s infinite ease-in-out;
-        }
-
-        .typing-dot:nth-child(1) {
-            animation-delay: 0s;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-
-            0%,
-            60%,
-            100% {
-                transform: translateY(0);
-            }
-
-            30% {
-                transform: translateY(-5px);
-            }
-        }
-    </style>
-    <style>
-        .resource-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .resource-card {
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .resource-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-        }
-
-        /* 资源详情页样式 */
-        .resource-detail {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .resource-detail h1 {
-            color: var(--secondary-color);
-            margin-bottom: 20px;
-        }
-
-        .resource-detail .meta {
-            color: var(--gray-color);
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-
-        .resource-detail .content {
-            line-height: 1.8;
-            margin-bottom: 30px;
-        }
-
-        .resource-detail .video-container {
-            position: relative;
-            width: 100%;
-            height: 0;
-            padding-bottom: 56.25%;
-            margin-bottom: 20px;
-        }
-
-        .resource-detail .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 8px;
-        }
-
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            text-decoration: none;
-        }
-
-        .back-button:hover {
-            background-color: var(--secondary-color);
         }
     </style>
 </head>
@@ -1580,7 +1219,7 @@ position: relative;
                 <div class="tab-buttons">
                     <button class="tab-btn active" data-tab="profile">
                         <i>📝</i> 修改个人信息
-                    </button>
+</button>
                     <button class="tab-btn" data-tab="change-password">
                         <i>🔒</i> 修改密码
                     </button>
@@ -1750,6 +1389,280 @@ position: relative;
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <label for="exercise-time">运动时间</label>
+                                    <input type="datetime-local" id="exercise-time">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="exercise-notes">备注</label>
+                                <textarea id="exercise-notes" rows="2" placeholder="记录运动情况，如餐前/餐后"></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">添加记录</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <h3>运动记录历史</h3>
+                    <div class="record-grid" id="exercise-records">
+                        <!-- 运动记录将通过JS动态加载 -->
+                    </div>
+                </div>
+
+                // DOMContentLoaded事件监听器结束
+                }
+                
+                // 填充个人信息表单 - 修复：移到全局作用域（DOMContentLoaded外部）
+                function populateProfileForm() {
+                    <div class="form-group">
+                        <label for="current-username">当前用户名</label>
+                        <input type="text" id="current-username" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-username">新用户名（选填，不修改请留空）</label>
+                        <input type="text" id="new-username" placeholder="请输入新用户名">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancel-profile">取消</button>
+                        <button type="submit" class="btn btn-primary">保存修改</button>
+                    </div>
+                </div>
+
+                <!-- 修改密码 -->
+                <div class="tab-content" id="change-password">
+                    <form class="user-form" id="change-password-form">
+                        <div class="form-group">
+                            <label for="old-password">当前密码</label>
+                            <input type="password" id="old-password" placeholder="请输入当前密码" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password">新密码</label>
+                            <input type="password" id="new-password" placeholder="请输入新密码" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password">确认新密码</label>
+                            <input type="password" id="confirm-password" placeholder="请再次输入新密码" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancel-password">取消</button>
+                            <button type="submit" class="btn btn-primary">修改密码</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 用户注销 -->
+                <div class="tab-content" id="logout">
+                    <div class="user-form">
+                        <p>您确定要注销当前账号吗？</p>
+                        <div class="form-actions">
+                            <button class="tab-btn btn btn-secondary">取消</button>
+                            <button class="btn btn-primary" id="logout-btn">确认注销</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 个人数据记录 -->
+        <div class="content-section" id="data-records">
+            <h2>📊 个人数据记录</h2>
+            <div class="data-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="blood-glucose">
+                            <i>🩸</i> 血糖记录
+                        </button>
+                    <button class="tab-btn" data-tab="diet">
+                        <i>🍎</i> 饮食记录
+                    </button>
+                    <button class="tab-btn" data-tab="exercise">
+                        <i>🏃</i> 运动记录
+                    </button>
+                    <button class="tab-btn" data-tab="medication">
+                        <i>💊</i> 用药记录
+                    </button>
+        </div>
+        <!-- 血糖记录 -->
+                <div class="tab-content active" id="blood-glucose">
+                    <div class="record-form">
+                        <h3>添加血糖记录</h3>
+                        <form id="bg-form">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <div class="form-group">
+                                    <label for="bg-value">血糖值 (mg/dL)</label>
+                                    <input type="number" id="bg-value" placeholder="例如: 120" min="20" max="600">
+                                </div>
+                                <div class="form-group">
+                                    <label for="bg-time">测量时间</label>
+                                    <input type="datetime-local" id="bg-time">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="bg-notes">备注</label>
+                                <textarea id="bg-notes" rows="2" placeholder="记录测量情况，如餐前/餐后"></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">添加记录</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <h3>血糖记录历史</h3>
+                    <div class="record-grid" id="bg-records">
+                        <!-- 血糖记录将通过JS动态加载 -->
+                    </div>
+                </div>
+
+                <!-- 饮食记录 -->
+                <div class="tab-content" id="diet">
+                    <div class="record-form">
+                        <h3>添加饮食记录</h3>
+                        <form id="diet-form">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <div class="form-group">
+                                    <label for="diet-meal">餐次</label>
+                                    <select id="diet-meal">
+                                        <option value="breakfast">早餐</option>
+                                        <option value="lunch">午餐</option>
+                                        <option value="dinner">晚餐</option>
+                                        <option value="snack">加餐</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="diet-time">用餐时间</label>
+                                    <input type="datetime-local" id="diet-time">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="diet-content">饮食内容</label>
+                                <textarea id="diet-content" rows="3" placeholder="详细记录所吃的食物和分量"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="diet-carbs">碳水化合物含量 (g)</label>
+                                <input type="number" id="diet-carbs" placeholder="估算碳水化合物含量">
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">添加记录</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <h3>饮食记录历史</h3>
+                    <div class="record-grid" id="diet-records">
+                        <!-- 饮食记录将通过JS动态加载 -->
+                    </div>
+                </div>
+
+                <!-- 运动记录 -->
+                <div class="tab-content" id="exercise">
+                    <div class="record-form">
+                        <h3>添加运动记录</h3>
+                        <form id="exercise-form">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <div class="form-group">
+                                    <label for="exercise-type">运动类型</label>
+                                    <select id="exercise-type">
+                                        <option value="walking">步行</option>
+                                        <option value="running">跑步</option>
+                                        <option value="cycling">骑行</option>
+                                        <option value="swimming">游泳</option>
+                                        <option value="yoga">瑜伽</option>
+                                        <option value="strength">力量训练</option>
+                                        <option value="other">其他</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exercise-time">运动时间</label>
+                                    <input type="datetime-local" id="exercise-time">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="exercise-notes">备注</label>
+                                <textarea id="exercise-notes" rows="2" placeholder="记录运动情况，如餐前/餐后"></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">添加记录</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <h3>运动记录历史</h3>
+                    <div class="record-grid" id="exercise-records">
+                        <!-- 运动记录将通过JS动态加载 -->
+                    </div>
+                </div>
+
+                <!-- 页面底部脚本 -->
+                <script>
+                    // 打印报告功能
+                    function printReport(period) {
+                        alert(`准备打印${period === 'week' ? '周' : '月'}报...`);
+                        // 实际应用中这里可以实现报告的打印逻辑
+                    }
+                    
+                    // 生成模拟报告数据函数
+                    function generateMockReportData(period) {
+                        const now = new Date();
+                        let bloodGlucoseStats = {
+                            average: period === 'week' ? 125 : 130,
+                            min: 80,
+                            max: 180,
+                            readings: period === 'week' ? 28 : 120
+                        };
+                        
+                        let exerciseStats = {
+                            count: period === 'week' ? 3 : 12,
+                            totalMinutes: period === 'week' ? 150 : 600
+                        };
+                        
+                        let dietStats = period === 'week' ? 75 : 80;
+                        let medicationStats = period === 'week' ? 85 : 90;
+                        
+                        let recommendations = [
+                            "继续保持良好的血糖监测习惯",
+                            "适当增加有氧运动时间",
+                            "注意控制晚餐后的碳水化合物摄入",
+                            "定期复查糖化血红蛋白"
+                        ];
+                        
+                        return {
+                            bloodGlucoseStats: bloodGlucoseStats,
+                            exerciseStats: exerciseStats,
+                            dietStats: dietStats,
+                            medicationStats: medicationStats,
+                            recommendations: recommendations
+                        };
+                    }
+                    
+                    // 填充个人信息表单
+                    function populateProfileForm() {
+                        const userData = JSON.parse(localStorage.getItem('currentUser'));
+                        if (userData) {
+                            const currentUsernameInput = document.getElementById('current-username');
+                            if (currentUsernameInput) {
+                                currentUsernameInput.value = userData.username || '';
+                            }
+                        }
+                    }
+                    
+                    // 修复图片路径 - 使用相对路径
+                    function fixImagePaths() {
+                        const images = document.querySelectorAll('img[src*="blood-sugar-trend"]');
+                        images.forEach(img => {
+                            if (img.src.includes('blood-sugar-trend.jpg')) {
+                                img.src = './images/background.jpg'; // 使用现有图片替代
+                            }
+                        });
+                    }
+                    
+                    // 在页面加载完成后修复图片路径
+                    document.addEventListener('DOMContentLoaded', function() {
+                        setTimeout(fixImagePaths, 100);
+                    });
+                </script>
+                
+                <script src="testReportInit.js"></script>
+            </body>
+            </html>
                                     <label for="exercise-duration">运动时长 (分钟)</label>
                                     <input type="number" id="exercise-duration" placeholder="例如: 30">
                                 </div>
@@ -2502,7 +2415,7 @@ position: relative;
                         <label for="appointment-doctor">就诊医生</label>
                         <input type="text" id="appointment-doctor" readonly>
                     </div>
-                    <div class="form-group">
+<div class="form-group">
                         <label for="appointment-date">预约日期</label>
                         <input type="date" id="appointment-date">
                     </div>
@@ -2647,7 +2560,7 @@ position: relative;
                 
                 // 如果没有保存的数据或加载失败，初始化默认数据
                 console.log('初始化默认数据');
-                window.sampleData = {
+window.sampleData = {
                     bloodglucose: [
                         { id: '1', value: '120', time: '2023-06-15T08:00', notes: '空腹血糖' },
                         { id: '2', value: '150', time: '2023-06-15T12:30', notes: '餐后2小时' },
@@ -2795,7 +2708,7 @@ position: relative;
                 });
             });
 
-            // 填充个人信息表单 - 修复：移到全局作用域
+            // 填充个人信息表单 - 修复：移到全局作用域（DOMContentLoaded外部）
             function populateProfileForm() {
                 const userData = JSON.parse(localStorage.getItem('currentUser'));
                 if (userData) {
@@ -2812,9 +2725,21 @@ position: relative;
             } else {
                 updateUIForLogout();
             }
+        }); // DOMContentLoaded事件监听器结束
 
-            // 为个人信息修改表单添加事件监听
-            const profileForm = document.getElementById('profile-form');
+        // 填充个人信息表单 - 修复：移到全局作用域（DOMContentLoaded外部）
+        function populateProfileForm() {
+            const userData = JSON.parse(localStorage.getItem('currentUser'));
+            if (userData) {
+                const currentUsernameInput = document.getElementById('current-username');
+                if (currentUsernameInput) {
+                    currentUsernameInput.value = userData.username || '';
+                }
+            }
+        }
+
+        // 为个人信息修改表单添加事件监听
+        const profileForm = document.getElementById('profile-form');
             if (profileForm) {
                 profileForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
@@ -2935,13 +2860,11 @@ position: relative;
                     }
                 });
             }
-          });
+          
         
         // 用户管理按钮点击事件
-        document.querySelector('.user-management-btn').addEventListener('click', function () {
             // 如果用户未登录，允许访问用户管理页面
             showSection('user-management');
-        });
 
         // 标签页切换功能
         function setupTabSwitching(containerId) {

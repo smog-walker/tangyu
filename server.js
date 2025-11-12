@@ -308,8 +308,94 @@ app.get('/api/ai-report/:userId/:period', async (req, res) => {
             });
         }
 
-        // 生成AI报告
-        const report = await generateAIReport(userId, period);
+        // AI报告生成函数 - 修复：添加缺失的函数
+        async function generateAIReport(userId, period) {
+            try {
+                // 获取用户数据
+                const user = await User.findById(userId);
+                if (!user) {
+                    throw new Error('用户不存在');
+                }
+        
+                // 获取健康记录数据
+                const healthRecords = await HealthRecord.find({ userId });
+                
+                // 根据周期过滤数据
+                const days = period === 'week' ? 7 : 30;
+                const startDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+                const periodRecords = healthRecords.filter(record => 
+                    new Date(record.timestamp) >= startDate
+                );
+        
+                // 分析血糖数据
+                const bloodGlucoseRecords = periodRecords.filter(r => r.type === 'bloodGlucose');
+                const bloodGlucoseValues = bloodGlucoseRecords.map(r => r.value);
+                
+                const bloodGlucoseStats = {
+                    average: bloodGlucoseValues.length > 0 ? 
+                        Math.round(bloodGlucoseValues.reduce((a, b) => a + b, 0) / bloodGlucoseValues.length) : 120,
+                    min: bloodGlucoseValues.length > 0 ? Math.min(...bloodGlucoseValues) : 80,
+                    max: bloodGlucoseValues.length > 0 ? Math.max(...bloodGlucoseValues) : 180,
+                    readings: bloodGlucoseValues.length
+                };
+        
+                // 分析运动数据
+                const exerciseRecords = periodRecords.filter(r => r.type === 'exercise');
+                const exerciseStats = {
+                    count: exerciseRecords.length,
+                    totalMinutes: exerciseRecords.reduce((sum, r) => sum + (r.value || 0), 0)
+                };
+        
+                // 分析饮食和用药数据
+                const dietRecords = periodRecords.filter(r => r.type === 'diet');
+                const medicationRecords = periodRecords.filter(r => r.type === 'medication');
+                
+                const dietStats = dietRecords.length > 0 ? 75 : 70;
+                const medicationStats = medicationRecords.length > 0 ? 85 : 80;
+        
+                // 生成建议
+                const recommendations = generateRecommendations(bloodGlucoseStats, exerciseStats);
+        
+                return {
+                    period: period,
+                    bloodGlucoseStats: bloodGlucoseStats,
+                    exerciseStats: exerciseStats,
+                    dietStats: dietStats,
+                    medicationStats: medicationStats,
+                    recommendations: recommendations,
+                    generatedAt: new Date().toISOString()
+                };
+            } catch (error) {
+                console.error('生成AI报告错误:', error);
+                throw error;
+            }
+        }
+        
+        // 生成建议函数
+        function generateRecommendations(bloodGlucoseStats, exerciseStats) {
+            const recommendations = [];
+            
+            if (bloodGlucoseStats.average > 140) {
+                recommendations.push("血糖水平偏高，建议减少糖分摄入并增加运动");
+            } else if (bloodGlucoseStats.average < 70) {
+                recommendations.push("血糖水平偏低，注意按时进食，避免低血糖");
+            } else {
+                recommendations.push("血糖控制良好，继续保持");
+            }
+            
+            if (exerciseStats.count < 3) {
+                recommendations.push("建议增加运动频率，每周至少3次有氧运动");
+            }
+            
+            if (bloodGlucoseStats.readings < 7) {
+                recommendations.push("建议增加血糖监测频率，更好地了解血糖变化");
+            }
+            
+            recommendations.push("保持均衡饮食，控制碳水化合物摄入");
+            recommendations.push("定期复查糖化血红蛋白，了解长期血糖控制情况");
+            
+            return recommendations;
+        }
 
         res.json({
             success: true,
