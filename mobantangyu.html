@@ -898,7 +898,7 @@
 
         .community-actions {
             display: flex;
-gap: 20px;
+            gap: 20px;
             padding-top: 15px;
             border-top: 1px solid var(--light-gray);
         }
@@ -1498,25 +1498,6 @@ gap: 20px;
             height: 100%;
             border-radius: 8px;
         }
-
-        /*
-        function generateMockReport(period) {
-            // 这个函数不再使用，因为我们现在只使用真实数据
-            console.warn('模拟数据生成函数已被禁用，请使用真实用户数据');
-            return {
-                period: period === 'week' ? '2024年第1周' : '2024年1月',
-                bloodGlucoseReport: '<p>这是模拟数据报告，请确保使用真实用户数据。</p>',
-                lifestyleReport: '<p>模拟生活方式分析数据。</p>',
-                bgChart: {
-                    labels: ['01-01', '01-02', '01-03'],
-                    data: [120, 130, 125]
-                },
-                lifestyleChart: {
-                    data: [70, 80, 75, 85, 90]
-                }
-            };
-        }
-        */
 
         .back-button {
             display: inline-flex;
@@ -2434,7 +2415,7 @@ gap: 20px;
                         <input type="text" id="edit-record-value">
                     </div>
                     <div class="form-group">
-<label for="edit-record-notes">备注</label>
+                        <label for="edit-record-notes">备注</label>
                         <textarea id="edit-record-notes" rows="3"></textarea>
                     </div>
                     <div class="form-actions">
@@ -2525,7 +2506,7 @@ gap: 20px;
                         <input type="text" id="appointment-doctor" readonly>
                     </div>
                     <div class="form-group">
-<label for="appointment-date">预约日期</label>
+                        <label for="appointment-date">预约日期</label>
                         <input type="date" id="appointment-date">
                     </div>
                     <div class="form-group">
@@ -2597,7 +2578,7 @@ gap: 20px;
                     bloodSugarTab.classList.add('active');
                     
                     // 隐藏所有标签内容
-document.querySelectorAll('.data-tabs .tab-content').forEach(content => {
+                    document.querySelectorAll('.data-tabs .tab-content').forEach(content => {
                         content.classList.remove('active');
                     });
                     // 显示血糖记录内容
@@ -2709,16 +2690,7 @@ document.querySelectorAll('.data-tabs .tab-content').forEach(content => {
                     alert('登录过程中出现错误，请重试');
                 }
             }
-            // 填充个人信息表单 - 将函数定义移到调用之前
-            function populateProfileForm() {
-                const userData = JSON.parse(localStorage.getItem('currentUser'));
-                if (userData) {
-                    const currentUsernameInput = document.getElementById('current-username');
-                    if (currentUsernameInput) {
-                        currentUsernameInput.value = userData.username || '';
-                    }
-                }
-            }
+
             function logout() {
                 localStorage.removeItem('currentUser');
                 updateUIForLogout();
@@ -2826,10 +2798,17 @@ document.querySelectorAll('.data-tabs .tab-content').forEach(content => {
                 });
             });
 
-
-
             // 填充个人信息表单
-            populateProfileForm();
+            function populateProfileForm() {
+                const userData = JSON.parse(localStorage.getItem('currentUser'));
+                if (userData) {
+                    const currentUsernameInput = document.getElementById('current-username');
+                    if (currentUsernameInput) {
+                        currentUsernameInput.value = userData.username || '';
+                    }
+                }
+            }
+
             // 检查初始登录状态
             if (isLoggedIn()) {
                 updateUIForLogin();
@@ -2951,7 +2930,7 @@ document.querySelectorAll('.data-tabs .tab-content').forEach(content => {
 
             // 添加注销功能
             const logoutBtn = document.getElementById('logout-btn');
-if (logoutBtn) {
+            if (logoutBtn) {
                 logoutBtn.addEventListener('click', function() {
                     if (confirm('确定要退出登录吗？')) {
                         logout();
@@ -2972,7 +2951,7 @@ if (logoutBtn) {
             const container = document.getElementById(containerId);
             if (!container) return;
 
-container.querySelectorAll('.tab-btn').forEach(button => {
+            container.querySelectorAll('.tab-btn').forEach(button => {
                 button.addEventListener('click', function () {
                     const tabId = this.getAttribute('data-tab');
 
@@ -3041,7 +3020,7 @@ container.querySelectorAll('.tab-btn').forEach(button => {
                 );
                 
                 if (hasProblem) {
-console.log('检测到初始加载问题，重新加载报告...');
+                    console.log('检测到初始加载问题，重新加载报告...');
                     // 强制清空内容并显示加载状态
                     reportContent.innerHTML = '<div style="text-align: center; padding: 40px;"><div style="font-size: 24px; margin-bottom: 10px;">🔄</div><div>正在生成周报...</div></div>';
                     // 立即加载报告
@@ -3055,7 +3034,7 @@ console.log('检测到初始加载问题，重新加载报告...');
         // 增强的检查机制：多重时间点检查
         const checkIntervals = [100, 300, 500, 800, 1000]; // 多个时间点检查
         checkIntervals.forEach(interval => {
-setTimeout(checkAndLoadAIReport, interval);
+            setTimeout(checkAndLoadAIReport, interval);
         });
         
         // 监听DOMContentLoaded事件，确保在DOM完全加载后再检查一次
@@ -3119,7 +3098,7 @@ setTimeout(checkAndLoadAIReport, interval);
                     let bgClass = 'bg-normal';
                     if (record.value < 70) bgClass = 'bg-low';
                     else if (record.value > 180) bgClass = 'bg-high';
-valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>`;
+                    valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>`;
                 } else if (type === 'diet') {
                     valueDisplay = `<div class="record-value">碳水化合物: ${record.carbs}g</div>`;
                 } else if (type === 'exercise') {
@@ -3197,7 +3176,7 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
                     'lunch': '午餐',
                     'dinner': '晚餐',
                     'snack': '加餐'
-                },
+                }[record.meal] || '饮食记录',
                 'exercise': {
                     'walking': '步行',
                     'running': '跑步',
@@ -3206,251 +3185,11 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
                     'yoga': '瑜伽',
                     'strength': '力量训练',
                     'other': '其他运动'
-                },
+                }[record.type] || '运动记录',
                 'medication': '用药记录'
             };
 
-            // 如果是简单类型，直接返回
-            if (typeof typeMap[type] === 'string') {
-                return typeMap[type];
-            }
-            
-            // 如果是复杂类型且有记录数据，返回具体名称
-            if (record && typeMap[type]) {
-                if (type === 'diet' && record.meal) {
-                    return typeMap.diet[record.meal] || '饮食记录';
-                } else if (type === 'exercise' && record.type) {
-                    return typeMap.exercise[record.type] || '运动记录';
-                }
-            }
-            
-            // 默认返回基本类型名称
-            return type === 'diet' ? '饮食记录' : 
-                   type === 'exercise' ? '运动记录' : 
-                   typeMap[type] || '未知记录';
-        }
-
-        // 将API返回的数据格式转换为前端需要的格式 - 修复：使用真实数据而不是模拟数据
-        function transformApiReportToFrontendFormat(apiData, period) {
-            const now = new Date();
-            let periodText = '';
-            let labels = [];
-            let bgData = [];
-            
-            // 使用API返回的真实血糖数据，而不是模拟数据
-            if (apiData.bloodGlucoseRecords && apiData.bloodGlucoseRecords.length > 0) {
-                // 使用真实的血糖记录数据
-                const bgRecords = apiData.bloodGlucoseRecords;
-                
-                // 根据周期生成标签和数据
-                if (period === 'week') {
-                    // 生成最近7天的日期标签
-                    for (let i = 6; i >= 0; i--) {
-                        const date = new Date();
-                        date.setDate(now.getDate() - i);
-                        const dateStr = date.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' });
-                        labels.push(dateStr);
-                        
-                        // 查找对应日期的血糖值
-                        const recordForDate = bgRecords.find(record => {
-                            const recordDate = new Date(record.timestamp);
-                            return recordDate.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }) === dateStr;
-                        });
-                        
-                        // 使用真实数据，如果没有则使用平均值
-                        if (recordForDate) {
-                            bgData.push(recordForDate.value);
-                        } else {
-                            bgData.push(apiData.summary?.bloodGlucose?.average || 120);
-                        }
-                    }
-                    
-                    const weekNumber = Math.ceil(now.getDate() / 7);
-                    periodText = `${now.getFullYear()}年${now.getMonth() + 1}月第${weekNumber}周`;
-                } else {
-                    // 生成最近30天的日期标签（每3天一个点）
-                    for (let i = 27; i >= 0; i -= 3) {
-                        const date = new Date();
-                        date.setDate(now.getDate() - i);
-                        const dateStr = date.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' });
-                        labels.push(dateStr);
-                        
-                        // 查找对应日期的血糖值
-                        const recordForDate = bgRecords.find(record => {
-                            const recordDate = new Date(record.timestamp);
-                            return recordDate.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }) === dateStr;
-                        });
-                        
-                        // 使用真实数据，如果没有则使用平均值
-                        if (recordForDate) {
-                            bgData.push(recordForDate.value);
-                        } else {
-                            bgData.push(apiData.summary?.bloodGlucose?.average || 120);
-                        }
-                    }
-                    
-                    periodText = `${now.getFullYear()}年${now.getMonth() + 1}月`;
-                }
-            } else {
-                // 如果没有血糖记录数据，使用API返回的统计数据
-                const avgBg = apiData.summary?.bloodGlucose?.average || 120;
-                
-                if (period === 'week') {
-                    // 生成最近7天的日期标签
-                    for (let i = 6; i >= 0; i--) {
-                        const date = new Date();
-                        date.setDate(now.getDate() - i);
-                        labels.push(date.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }));
-                        bgData.push(avgBg); // 使用平均值
-                    }
-                    
-                    const weekNumber = Math.ceil(now.getDate() / 7);
-                    periodText = `${now.getFullYear()}年${now.getMonth() + 1}月第${weekNumber}周`;
-                } else {
-                    // 生成最近30天的日期标签（每3天一个点）
-                    for (let i = 27; i >= 0; i -= 3) {
-                        const date = new Date();
-                        date.setDate(now.getDate() - i);
-                        labels.push(date.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }));
-                        bgData.push(avgBg); // 使用平均值
-                    }
-                    
-                    periodText = `${now.getFullYear()}年${now.getMonth() + 1}月`;
-                }
-            }
-            
-            // 计算平均血糖 - 使用真实数据计算
-            const avgBg = bgData.length > 0 ? Math.round(bgData.reduce((sum, val) => sum + val, 0) / bgData.length) : 
-                        (apiData.summary?.bloodGlucose?.average || 120);
-            const bgStatusClass = avgBg < 80 ? 'bg-low' : avgBg > 150 ? 'bg-high' : 'bg-normal';
-            
-            // 生成血糖控制报告 - 使用真实统计数据
-            let bloodGlucoseReport = `
-                <p>本${period === 'week' ? '周' : '月'}您的平均血糖值为 <span class="${bgStatusClass}">${avgBg} mg/dL</span>，处于${avgBg < 80 ? '偏低' : avgBg > 150 ? '偏高' : '理想'}范围内。</p>
-            `;
-            
-            // 添加详细的血糖统计数据
-            if (apiData.summary?.bloodGlucose) {
-                const bgStats = apiData.summary.bloodGlucose;
-                bloodGlucoseReport += `
-                    <p>详细统计：</p>
-                    <ul>
-                        <li>测量次数：${bgStats.records || 0} 次</li>
-                        <li>最高值：${bgStats.maxValue || '--'} mg/dL</li>
-                        <li>最低值：${bgStats.minValue || '--'} mg/dL</li>
-                        <li>正常范围次数：${bgStats.normalCount || 0} 次</li>
-                        <li>偏高次数：${bgStats.highCount || 0} 次</li>
-                        <li>偏低次数：${bgStats.lowCount || 0} 次</li>
-                    </ul>
-                `;
-            }
-            
-            // 添加API返回的建议
-            if (apiData.recommendations && apiData.recommendations.length > 0) {
-                bloodGlucoseReport += '<p>个性化建议：</p><ul>';
-                apiData.recommendations.forEach(recommendation => {
-                    bloodGlucoseReport += `<li>${recommendation}</li>`;
-                });
-                bloodGlucoseReport += '</ul>';
-            }
-            
-            // 生成生活方式报告 - 使用真实数据
-            let lifestyleReport = '';
-            if (apiData.summary) {
-                if (apiData.summary.exercise) {
-                    const exercise = apiData.summary.exercise;
-                    lifestyleReport += `<p>本${period === 'week' ? '周' : '月'}您共进行了${exercise.count || 0}次运动，总时长${exercise.totalMinutes || 0}分钟，平均每次${exercise.averageDuration || 0}分钟。</p>`;
-                }
-                
-                if (apiData.summary.diet !== undefined) {
-                    lifestyleReport += `<p>饮食记录：${apiData.summary.diet} 次</p>`;
-                }
-                
-                if (apiData.summary.medication !== undefined) {
-                    lifestyleReport += `<p>用药记录：${apiData.summary.medication} 次</p>`;
-                }
-                
-                if (apiData.summary.sleepQuality !== undefined) {
-                    lifestyleReport += `<p>睡眠质量评分：${apiData.summary.sleepQuality}/100</p>`;
-                }
-                
-                if (apiData.summary.monitoringFrequency !== undefined) {
-                    lifestyleReport += `<p>血糖监测频率评分：${apiData.summary.monitoringFrequency}/100</p>`;
-                }
-            }
-            
-            // 如果生活方式报告为空，添加一些基本信息
-            if (!lifestyleReport) {
-                lifestyleReport = `
-                    <p>建议每周至少进行150分钟中等强度的有氧运动。</p>
-                    <p>保持均衡饮食，控制碳水化合物摄入。</p>
-                    <p>定期监测血糖，记录血糖变化趋势。</p>
-                `;
-            }
-            
-            // 生成生活方式雷达图数据 - 使用真实数据
-            const lifestyleChartData = [
-                apiData.summary?.exercise?.frequencyScore || 70, // 运动频率
-                Math.min(100, Math.max(0, (apiData.summary?.diet || 0) * 5)), // 饮食控制
-                apiData.summary?.sleepQuality || 70, // 睡眠质量
-                Math.min(100, Math.max(0, (apiData.summary?.medication || 0) * 10)), // 用药依从性
-                apiData.summary?.monitoringFrequency || 70  // 血糖监测频率
-            ];
-            
-            return {
-                period: periodText,
-                bloodGlucoseReport: bloodGlucoseReport,
-                lifestyleReport: lifestyleReport,
-                bgChart: {
-                    labels: labels,
-                    data: bgData
-                },
-                lifestyleChart: {
-                    data: lifestyleChartData
-                }
-            };
-        }
-
-        // 获取记录类型的中文名称
-        function getRecordTypeName(type, record = null) {
-            const typeMap = {
-                'blood-glucose': '血糖记录',
-                'diet': {
-                    'breakfast': '早餐',
-                    'lunch': '午餐',
-                    'dinner': '晚餐',
-                    'snack': '加餐'
-                },
-                'exercise': {
-                    'walking': '步行',
-                    'running': '跑步',
-                    'cycling': '骑行',
-                    'swimming': '游泳',
-                    'yoga': '瑜伽',
-                    'strength': '力量训练',
-                    'other': '其他运动'
-                },
-                'medication': '用药记录'
-            };
-
-            // 如果是简单类型，直接返回
-            if (typeof typeMap[type] === 'string') {
-                return typeMap[type];
-            }
-            
-            // 如果是复杂类型且有记录数据，返回具体名称
-            if (record && typeMap[type]) {
-                if (type === 'diet' && record.meal) {
-                    return typeMap.diet[record.meal] || '饮食记录';
-                } else if (type === 'exercise' && record.type) {
-                    return typeMap.exercise[record.type] || '运动记录';
-                }
-            }
-            
-            // 默认返回基本类型名称
-            return type === 'diet' ? '饮食记录' : 
-                   type === 'exercise' ? '运动记录' : 
-                   typeMap[type] || '未知记录';
+            return typeof typeMap === 'string' ? typeMap : typeMap[type];
         }
 
         // 格式化日期
@@ -3513,7 +3252,7 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
                 if (e.target === this) {
                     this.classList.remove('active');
                 }
-            });
+          });
         });
 
         // 表单提交处理
@@ -3606,6 +3345,7 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
                             notes: notes
                         };
                     }
+                    
                     // 将新记录添加到数据中
                     if (recordType && newRecord) {
                         let dataKey;
@@ -3622,6 +3362,7 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
                         
                         // 添加新记录
                         window.sampleData[dataKey].push(newRecord);
+                        
                         // 保存数据到localStorage
                         saveSampleData();
                         
@@ -4119,7 +3860,7 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
             },
             {
                 id: '3',
-title: '分享我的控糖经验',
+                title: '分享我的控糖经验',
                 content: '经过半年的努力，我的糖化血红蛋白从8.5%降到了6.2%。主要经验是：规律作息、合理饮食、适量运动、定期监测血糖。希望能帮助到大家！',
                 author: '控糖达人老王',
                 date: '2023-12-15',
@@ -4718,8 +4459,6 @@ title: '分享我的控糖经验',
                 <li><strong>定时定量</strong>：规律进食，避免暴饮暴食</li>
                 <li><strong>选择低GI食物</strong>：优先选择升糖指数低的食物</li>
             </ul>
-            <!-- 在图片标签中添加错误处理 -->
-            <img src="images/blood-sugar-trend.jpg" alt="血糖趋势图" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5OTkiPuWKoOi9veWbvuWDj+WkmumUmeivr+WbvuWDjzwvdGV4dD48L3N2Zz4='; this.alt='血糖趋势图（图片加载失败）'">
             <h3>推荐食物</h3>
             <p>全谷物、蔬菜、豆类、瘦肉、鱼类等...</p>
         `,
@@ -5083,7 +4822,7 @@ title: '分享我的控糖经验',
                 
                 if (newsList.length === 0) {
                     manageContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 40px 0;">您还没有发布任何资讯</p>';
-return;
+                    return;
                 }
                 
                 manageContainer.innerHTML = '';
@@ -5107,7 +4846,7 @@ return;
                         </div>
                         <div class="community-actions">
                             <div class="community-action">
-<i>👍</i> 点赞 (${news.likes || 0})
+                                <i>👍</i> 点赞 (${news.likes || 0})
                             </div>
                             <div class="community-action">
                                 <i>💬</i> 评论 (${news.comments || 0})
@@ -5369,7 +5108,7 @@ return;
             }
         });
         
-        // 加载AI分析报告 - 修复：避免使用模拟数据
+        // 加载AI分析报告
         async function loadAIReport(userId, period) {
             try {
                 // 显示加载状态
@@ -5381,8 +5120,8 @@ return;
                 
                 reportContent.innerHTML = '<div style="text-align: center; padding: 40px;">正在生成' + (period === 'week' ? '周报' : '月报') + '...</div>';
                 
-                // 调用API获取报告 - 使用正确的方法名
-                const report = await window.apiClient.getAIReport(userId, period);
+                // 调用API获取报告
+                const report = await window.apiClient.generateAIReport(userId, period);
                 
                 // 渲染报告内容
                 if (report && report.success && report.data) {
@@ -5398,14 +5137,9 @@ return;
                         }
                     } catch (transformError) {
                         console.error('转换报告数据失败:', transformError);
-                        // 不再使用模拟数据，而是显示错误信息
-                        reportContent.innerHTML = `
-                            <div style="text-align: center; padding: 40px; color: #ff6b6b;">
-                                <h3>报告生成失败</h3>
-                                <p>数据转换过程中出现错误，请稍后重试。</p>
-                                <p>错误详情：${transformError.message}</p>
-                            </div>
-                        `;
+                        // 使用模拟数据
+                        const mockReport = generateMockReport(period);
+                        renderReport(mockReport, period);
                     }
                 } else {
                     throw new Error('获取报告失败: ' + (report ? report.message : '未知错误'));
@@ -5413,24 +5147,16 @@ return;
             } catch (error) {
                 console.error('加载AI报告失败:', error);
                 
-                // 加载失败时显示错误消息，不再使用模拟数据
+                // 加载失败时显示错误消息和模拟数据
                 const containerId = period === 'week' ? 'weekly-report' : 'monthly-report';
                 const reportContainer = document.getElementById(containerId);
-                const reportContent = reportContainer.querySelector('.report-container');
                 
-                reportContent.innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: #ff6b6b;">
-                        <h3>报告加载失败</h3>
-                        <p>无法获取您的健康数据报告，请检查网络连接后重试。</p>
-                        <p>错误详情：${error.message}</p>
-                        <button onclick="loadAIReport('${userId}', '${period}')" style="margin-top: 20px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                            重新加载报告
-                        </button>
-                    </div>
-                `;
+                // 使用模拟数据
+                const mockReport = generateMockReport(period);
+                renderReport(mockReport, period);
                 
-                // 不再显示模拟数据警告
-                console.warn('AI报告加载失败，已禁用模拟数据回退功能');
+                // 显示错误提示
+                alert('报告加载失败，显示模拟数据。请检查网络连接后重试。');
             }
         }
         
@@ -5695,6 +5421,7 @@ return;
                     '您的运动习惯良好，继续保持每周至少150分钟中等强度运动'
                 ];
                 renderRecommendations(mockRecommendations);
+                
                 alert('建议加载失败，显示模拟数据。请检查网络连接后重试。');
             }
         }
@@ -5718,6 +5445,7 @@ return;
             
             if (healthData.exercise && healthData.exercise.length > 0) {
                 const exerciseDays = new Set(healthData.exercise.map(record => new Date(record.date).toDateString())).size;
+                
                 if (exerciseDays < 3) {
                     recommendations.push('建议每周至少进行150分钟中等强度的有氧运动，如快走、游泳或骑自行车。');
                 }

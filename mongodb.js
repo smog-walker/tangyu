@@ -71,18 +71,34 @@ const aiReportSchema = new mongoose.Schema({
     generatedAt: { type: Date, default: Date.now }
 });
 
+// 创建模型（移到函数定义之前）
+const User = mongoose.model('User', userSchema);
+const HealthRecord = mongoose.model('HealthRecord', healthRecordSchema);
+const Post = mongoose.model('Post', postSchema);
+const Comment = mongoose.model('Comment', commentSchema);
+const AIReport = mongoose.model('AIReport', aiReportSchema);
+
 // AI报告生成函数，提供更完整的数据
 async function generateAIReport(userId, period = 'week') {
     try {
+        // 直接使用userId作为ObjectId，无需转换
+        const actualUserId = userId;
+        
+        // 验证用户是否存在
+        const user = await User.findById(actualUserId);
+        if (!user) {
+            throw new Error(`用户不存在: ${userId}`);
+        }
+        
         // 计算日期范围
         const endDate = new Date();
         const startDate = new Date();
         const days = period === 'week' ? 7 : 30;
         startDate.setDate(endDate.getDate() - days);
 
-        // 获取用户的详细健康数据记录
+        // 获取用户的详细健康数据记录（合并两次查询为一次）
         const healthRecords = await HealthRecord.find({
-            userId: userId,
+            userId: actualUserId,
             timestamp: { $gte: startDate, $lte: endDate }
         }).sort({ timestamp: 1 });
 
@@ -161,7 +177,7 @@ async function generateAIReport(userId, period = 'week') {
 
         // 保存报告到数据库
         const aiReport = new AIReport({
-            userId: userId,
+            userId: actualUserId,
             period: period,
             summary: report.summary,
             recommendations: report.recommendations,
@@ -178,7 +194,7 @@ async function generateAIReport(userId, period = 'week') {
 }
 
 // 生成个性化建议
-function generateRecommendations(bgStats, exerciseStats, dietCount) {
+function generateRecommendations(bgStats, exerciseStats, dietCount, medicationCount) {
     const recommendations = [];
     
     // 基于血糖数据的建议
@@ -212,13 +228,6 @@ function generateRecommendations(bgStats, exerciseStats, dietCount) {
     
     return recommendations;
 }
-
-// 创建模型
-const User = mongoose.model('User', userSchema);
-const HealthRecord = mongoose.model('HealthRecord', healthRecordSchema);
-const Post = mongoose.model('Post', postSchema);
-const Comment = mongoose.model('Comment', commentSchema);
-const AIReport = mongoose.model('AIReport', aiReportSchema);
 
 module.exports = {
     connectDB,

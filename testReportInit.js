@@ -1,12 +1,14 @@
 // 测试AI报告初始化修复的脚本
 console.log('AI报告初始化修复测试脚本已加载');
 
-// 记录初始化状态
-let initializationSteps = [];
+// 修复：使用全局变量避免重复声明问题
+if (typeof window.initializationSteps === 'undefined') {
+    window.initializationSteps = [];
+}
 
 // 等待页面加载完成
 document.addEventListener('DOMContentLoaded', function() {
-    initializationSteps.push({ time: new Date().toISOString(), event: 'DOMContentLoaded' });
+    window.initializationSteps.push({ time: new Date().toISOString(), event: 'DOMContentLoaded' });
     console.log('页面加载完成，检查AI报告初始化状态...');
     
     // 检查AI个性化分析区域是否存在
@@ -26,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('周报容器存在');
                 console.log('周报内容类型:', reportContent.innerHTML.includes('img') ? '图片' : '报告内容');
                 console.log('周报内容长度:', reportContent.innerHTML.trim().length);
-                initializationSteps.push({
+                window.initializationSteps.push({
                     time: new Date().toISOString(), 
                     event: 'InitialContentCheck', 
                     contentLength: reportContent.innerHTML.trim().length,
@@ -42,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const hasImage = currentContent.includes('img');
                     console.log(`第${checkCount}次检查报告状态: 内容长度=${currentContent.length}, 包含图片=${hasImage}`);
                     
-                    initializationSteps.push({
+                    window.initializationSteps.push({
                         time: new Date().toISOString(), 
                         event: 'ContentCheck', 
                         checkNumber: checkCount,
@@ -92,12 +94,12 @@ document.addEventListener('DOMContentLoaded', function() {
 // 显示初始化摘要
 function showInitializationSummary() {
     console.log('\n=== AI报告初始化摘要 ===');
-    initializationSteps.forEach(step => {
+    window.initializationSteps.forEach(step => {
         console.log(`[${step.time}] ${step.event}:`, step);
     });
     
     // 检查是否有成功加载的证据
-    const successfulLoad = initializationSteps.some(step => 
+    const successfulLoad = window.initializationSteps.some(step => 
         step.event === 'ContentCheck' && step.contentLength > 0 && !step.hasImage
     );
     

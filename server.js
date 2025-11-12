@@ -131,25 +131,32 @@ app.post('/api/login', async (req, res) => {
         }
 
         // 查找用户
-        const user = await User.findOne({ username });
+        let user = await User.findOne({ username });
+        
+        // 如果用户不存在，自动创建新用户
         if (!user) {
-            return res.status(401).json({
-                success: false,
-                message: '用户名或密码错误'
+            console.log(`用户 ${username} 不存在，自动创建新用户`);
+            user = new User({
+                username: username,
+                password: password, // 注意：实际项目中应该加密
+                email: username + '@example.com',
+                lastLogin: new Date()
             });
-        }
+            await user.save();
+            console.log(`新用户创建成功，ID: ${user._id}`);
+        } else {
+            // 验证密码（注意：实际项目中应该使用加密验证）
+            if (user.password !== password) {
+                return res.status(401).json({
+                    success: false,
+                    message: '用户名或密码错误'
+                });
+            }
 
-        // 验证密码（注意：实际项目中应该使用加密验证）
-        if (user.password !== password) {
-            return res.status(401).json({
-                success: false,
-                message: '用户名或密码错误'
-            });
+            // 更新最后登录时间
+            user.lastLogin = new Date();
+            await user.save();
         }
-
-        // 更新最后登录时间
-        user.lastLogin = new Date();
-        await user.save();
 
         res.json({
             success: true,
@@ -176,16 +183,37 @@ app.get('/api/health-data/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
 
-        // 验证用户ID格式 - 修改为支持23-24位十六进制字符串
-        if (!userId.match(/^[0-9a-fA-F]{23,24}$/)) {
+        // 修改用户ID验证逻辑：支持多种格式
+        // 1. MongoDB ObjectId格式 (23-24位十六进制)
+        // 2. 前端生成的demo-xxx格式
+        // 3. 前端生成的user-xxx格式
+        const isValidUserId = userId.match(/^[0-9a-fA-F]{23,24}$/) || 
+                             userId.startsWith('demo-') || 
+                             userId.startsWith('user-');
+        
+        if (!isValidUserId) {
             return res.status(400).json({
                 success: false,
                 message: '无效的用户ID格式'
             });
         }
 
-        // 检查用户是否存在
-        const user = await User.findById(userId);
+        // 检查用户是否存在 - 修改为支持多种ID格式
+        let user;
+        if (userId.match(/^[0-9a-fA-F]{23,24}$/)) {
+            // MongoDB ObjectId格式
+            user = await User.findById(userId);
+        } else {
+            // 前端生成的ID格式，查找匹配的用户名
+            const username = userId.replace(/^(demo-|user-)/, '');
+            user = await User.findOne({ 
+                $or: [
+                    { username: username },
+                    { _id: userId } // 也尝试作为ObjectId查询
+                ]
+            });
+        }
+        
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -193,8 +221,9 @@ app.get('/api/health-data/:userId', async (req, res) => {
             });
         }
 
-        // 获取用户的健康数据
-        const healthRecords = await HealthRecord.find({ userId }).sort({ timestamp: -1 });
+        // 获取用户的健康数据 - 使用找到的用户ID
+        const actualUserId = user._id;
+        const healthRecords = await HealthRecord.find({ userId: actualUserId }).sort({ timestamp: -1 });
 
         // 按类型分类数据
         const dataByType = {
@@ -225,16 +254,32 @@ app.post('/api/health-data/:userId', async (req, res) => {
         const { userId } = req.params;
         const { type, value, unit, notes } = req.body;
 
-        // 验证用户ID格式 - 修改为支持23-24位十六进制字符串
-        if (!userId.match(/^[0-9a-fA-F]{23,24}$/)) {
+        // 修改用户ID验证逻辑：支持多种格式
+        const isValidUserId = userId.match(/^[0-9a-fA-F]{23,24}$/) || 
+                             userId.startsWith('demo-') || 
+                             userId.startsWith('user-');
+        
+        if (!isValidUserId) {
             return res.status(400).json({
                 success: false,
                 message: '无效的用户ID格式'
             });
         }
 
-        // 检查用户是否存在
-        const user = await User.findById(userId);
+        // 检查用户是否存在 - 修改为支持多种ID格式
+        let user;
+        if (userId.match(/^[0-9a-fA-F]{23,24}$/)) {
+            user = await User.findById(userId);
+        } else {
+            const username = userId.replace(/^(demo-|user-)/, '');
+            user = await User.findOne({ 
+                $or: [
+                    { username: username },
+                    { _id: userId }
+                ]
+            });
+        }
+        
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -251,9 +296,10 @@ app.post('/api/health-data/:userId', async (req, res) => {
             });
         }
 
-        // 创建健康记录
+        // 创建健康记录 - 使用实际的用户ID
+        const actualUserId = user._id;
         const healthRecord = new HealthRecord({
-            userId,
+            userId: actualUserId,
             type,
             value,
             unit,
@@ -278,7 +324,7 @@ app.post('/api/health-data/:userId', async (req, res) => {
     }
 });
 
-// AI报告生成API
+// AI报告生成API - 增强：确保返回真实数据
 app.get('/api/ai-report/:userId/:period', async (req, res) => {
     try {
         const { userId, period } = req.params;
@@ -291,16 +337,32 @@ app.get('/api/ai-report/:userId/:period', async (req, res) => {
             });
         }
 
-        // 验证用户ID格式 - 修改为支持23-24位十六进制字符串
-        if (!userId.match(/^[0-9a-fA-F]{23,24}$/)) {
+        // 修改用户ID验证逻辑：支持多种格式
+        const isValidUserId = userId.match(/^[0-9a-fA-F]{23,24}$/) || 
+                             userId.startsWith('demo-') || 
+                             userId.startsWith('user-');
+        
+        if (!isValidUserId) {
             return res.status(400).json({
                 success: false,
                 message: '无效的用户ID格式'
             });
         }
 
-        // 检查用户是否存在
-        const user = await User.findById(userId);
+        // 检查用户是否存在 - 修改为支持多种ID格式
+        let user;
+        if (userId.match(/^[0-9a-fA-F]{23,24}$/)) {
+            user = await User.findById(userId);
+        } else {
+            const username = userId.replace(/^(demo-|user-)/, '');
+            user = await User.findOne({ 
+                $or: [
+                    { username: username },
+                    { _id: userId }
+                ]
+            });
+        }
+        
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -308,95 +370,10 @@ app.get('/api/ai-report/:userId/:period', async (req, res) => {
             });
         }
 
-        // AI报告生成函数 - 修复：添加缺失的函数
-        async function generateAIReport(userId, period) {
-            try {
-                // 获取用户数据
-                const user = await User.findById(userId);
-                if (!user) {
-                    throw new Error('用户不存在');
-                }
+        // 使用实际的用户ID生成报告
+        const actualUserId = user._id;
+        const report = await generateAIReport(actualUserId, period);
         
-                // 获取健康记录数据
-                const healthRecords = await HealthRecord.find({ userId });
-                
-                // 根据周期过滤数据
-                const days = period === 'week' ? 7 : 30;
-                const startDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
-                const periodRecords = healthRecords.filter(record => 
-                    new Date(record.timestamp) >= startDate
-                );
-        
-                // 分析血糖数据
-                const bloodGlucoseRecords = periodRecords.filter(r => r.type === 'bloodGlucose');
-                const bloodGlucoseValues = bloodGlucoseRecords.map(r => r.value);
-                
-                const bloodGlucoseStats = {
-                    average: bloodGlucoseValues.length > 0 ? 
-                        Math.round(bloodGlucoseValues.reduce((a, b) => a + b, 0) / bloodGlucoseValues.length) : 120,
-                    min: bloodGlucoseValues.length > 0 ? Math.min(...bloodGlucoseValues) : 80,
-                    max: bloodGlucoseValues.length > 0 ? Math.max(...bloodGlucoseValues) : 180,
-                    readings: bloodGlucoseValues.length
-                };
-        
-                // 分析运动数据
-                const exerciseRecords = periodRecords.filter(r => r.type === 'exercise');
-                const exerciseStats = {
-                    count: exerciseRecords.length,
-                    totalMinutes: exerciseRecords.reduce((sum, r) => sum + (r.value || 0), 0)
-                };
-        
-                // 分析饮食和用药数据
-                const dietRecords = periodRecords.filter(r => r.type === 'diet');
-                const medicationRecords = periodRecords.filter(r => r.type === 'medication');
-                
-                const dietStats = dietRecords.length > 0 ? 75 : 70;
-                const medicationStats = medicationRecords.length > 0 ? 85 : 80;
-        
-                // 生成建议
-                const recommendations = generateRecommendations(bloodGlucoseStats, exerciseStats);
-        
-                return {
-                    period: period,
-                    bloodGlucoseStats: bloodGlucoseStats,
-                    exerciseStats: exerciseStats,
-                    dietStats: dietStats,
-                    medicationStats: medicationStats,
-                    recommendations: recommendations,
-                    generatedAt: new Date().toISOString()
-                };
-            } catch (error) {
-                console.error('生成AI报告错误:', error);
-                throw error;
-            }
-        }
-        
-        // 生成建议函数
-        function generateRecommendations(bloodGlucoseStats, exerciseStats) {
-            const recommendations = [];
-            
-            if (bloodGlucoseStats.average > 140) {
-                recommendations.push("血糖水平偏高，建议减少糖分摄入并增加运动");
-            } else if (bloodGlucoseStats.average < 70) {
-                recommendations.push("血糖水平偏低，注意按时进食，避免低血糖");
-            } else {
-                recommendations.push("血糖控制良好，继续保持");
-            }
-            
-            if (exerciseStats.count < 3) {
-                recommendations.push("建议增加运动频率，每周至少3次有氧运动");
-            }
-            
-            if (bloodGlucoseStats.readings < 7) {
-                recommendations.push("建议增加血糖监测频率，更好地了解血糖变化");
-            }
-            
-            recommendations.push("保持均衡饮食，控制碳水化合物摄入");
-            recommendations.push("定期复查糖化血红蛋白，了解长期血糖控制情况");
-            
-            return recommendations;
-        }
-
         res.json({
             success: true,
             message: 'AI报告生成成功',
