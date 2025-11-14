@@ -112,22 +112,31 @@ class APIClient {
         }
     }
 
-    // 获取AI报告 - 增强版，基于真实数据，禁用模拟数据
+    // 获取AI报告 - 智能验证版本
     async getAIReport(userId, period) {
         try {
             // 如果userId是'current_user'，尝试从localStorage获取真实用户ID
             const actualUserId = userId === 'current_user' ? this.getCurrentUserId() : userId;
             const result = await this.request(`/api/ai-report/${actualUserId}/${period}`);
             
-            // 验证返回的数据是否包含真实用户数据
+            // 智能验证返回的数据
             if (result && result.success && result.data) {
-                // 检查数据是否包含真实记录
-                const hasRealData = result.data.summary && 
-                               (result.data.summary.bloodGlucose?.records > 0 || 
-                                result.data.bloodGlucoseRecords?.length > 0);
+                const reportData = result.data;
                 
-                if (!hasRealData) {
-                    console.warn('API返回的数据可能不包含真实用户记录');
+                // 检查是否有任何健康数据记录
+                const hasAnyHealthData = 
+                    (reportData.summary?.bloodGlucose?.records > 0) ||
+                    (reportData.summary?.exercise?.count > 0) ||
+                    (reportData.summary?.diet > 0) ||
+                    (reportData.summary?.medication > 0) ||
+                    (reportData.bloodGlucoseRecords?.length > 0);
+                
+                if (!hasAnyHealthData) {
+                    console.warn('当前时间段内可能没有足够的健康数据记录');
+                    // 添加用户友好的提示信息
+                    result.data.userMessage = '建议您先输入一些健康数据，以便生成更准确的报告';
+                } else {
+                    console.log('AI报告数据验证通过，基于真实用户数据生成');
                 }
                 
                 return result;
@@ -136,8 +145,7 @@ class APIClient {
             }
         } catch (error) {
             console.error('获取AI报告失败:', error);
-            // 不再使用模拟数据，直接抛出错误
-            throw new Error('无法获取真实用户数据报告：' + error.message);
+            throw new Error('无法获取用户数据报告：' + error.message);
         }
     }
 
@@ -411,12 +419,24 @@ class APIClient {
         ];
     }
 
-    // 保存健康数据
-    async saveHealthData(userId, data) {
-        return await this.request(`/api/health-data/${userId}`, {
-            method: 'POST',
-            body: JSON.stringify(data)
-        });
+    // 保存健康数据 - 修改为匹配后端API参数格式
+    async saveHealthData(userId, type, value, unit = '', notes = '') {
+        try {
+            const data = {
+                type: type,
+                value: value,
+                unit: unit,
+                notes: notes
+            };
+            
+            return await this.request(`/api/health-data/${userId}`, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+        } catch (error) {
+            console.error('保存健康数据失败:', error);
+            throw new Error('保存健康数据失败：' + error.message);
+        }
     }
 
     // 健康检查

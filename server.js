@@ -389,6 +389,95 @@ app.get('/api/ai-report/:userId/:period', async (req, res) => {
     }
 });
 
+// AI报告生成API - 增强：添加缓存机制
+app.get('/api/ai-report/:userId/:period', async (req, res) => {
+    try {
+        const { userId, period } = req.params;
+
+        // 验证参数
+        if (!['week', 'month'].includes(period)) {
+            return res.status(400).json({
+                success: false,
+                message: '报告周期必须是 week 或 month'
+            });
+        }
+
+        // 修改用户ID验证逻辑：支持多种格式
+        const isValidUserId = userId.match(/^[0-9a-fA-F]{23,24}$/) || 
+                             userId.startsWith('demo-') || 
+                             userId.startsWith('user-');
+        
+        if (!isValidUserId) {
+            return res.status(400).json({
+                success: false,
+                message: '无效的用户ID格式'
+            });
+        }
+
+        // 检查用户是否存在 - 修改为支持多种ID格式
+        let user;
+        if (userId.match(/^[0-9a-fA-F]{23,24}$/)) {
+            user = await User.findById(userId);
+        } else {
+            const username = userId.replace(/^(demo-|user-)/, '');
+            user = await User.findOne({ 
+                $or: [
+                    { username: username },
+                    { _id: userId }
+                ]
+            });
+        }
+        
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: '用户不存在'
+            });
+        }
+
+        // 使用实际的用户ID
+        const actualUserId = user._id;
+        
+        // 检查是否有缓存的报告（最近1小时内生成的）
+        const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+        const cachedReport = await AIReport.findOne({
+            userId: actualUserId,
+            period: period,
+            generatedAt: { $gte: oneHourAgo }
+        }).sort({ generatedAt: -1 });
+        
+        let report;
+        if (cachedReport) {
+            // 使用缓存的报告
+            report = {
+                period: cachedReport.period,
+                generatedAt: cachedReport.generatedAt,
+                summary: cachedReport.summary,
+                recommendations: cachedReport.recommendations,
+                bloodGlucoseRecords: [] // 前端可以根据需要重新查询详细记录
+            };
+            console.log('使用缓存的AI报告');
+        } else {
+            // 生成新报告
+            report = await generateAIReport(actualUserId, period);
+            console.log('生成新的AI报告');
+        }
+        
+        res.json({
+            success: true,
+            message: 'AI报告生成成功',
+            data: report
+        });
+    } catch (error) {
+        console.error('生成AI报告错误:', error);
+        res.status(500).json({
+            success: false,
+            message: '服务器内部错误',
+            error: error.message
+        });
+    }
+});
+
 // 社区帖子API端点 - 修复：添加缺失的API端点
 app.get('/api/community/posts', async (req, res) => {
     try {

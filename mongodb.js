@@ -155,7 +155,7 @@ async function generateAIReport(userId, period = 'week') {
         // 生成个性化建议
         const recommendations = generateRecommendations(bgStats, exerciseStats, dietRecords.length, medicationRecords.length);
 
-        // 生成完整的报告内容
+        // 生成完整的报告内容 - 移除所有随机数据
         const report = {
             period: period,
             generatedAt: new Date().toISOString(),
@@ -164,8 +164,7 @@ async function generateAIReport(userId, period = 'week') {
                 exercise: exerciseStats,
                 diet: dietRecords.length,
                 medication: medicationRecords.length,
-                sleepQuality: Math.floor(Math.random() * 30) + 60, // 模拟睡眠质量数据
-                monitoringFrequency: Math.min(100, bgRecords.length * 10) // 监测频率评分
+                monitoringFrequency: Math.min(100, bgRecords.length * 10) // 基于真实数据的监测频率
             },
             recommendations: recommendations,
             // 添加原始记录用于前端图表

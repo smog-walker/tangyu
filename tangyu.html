@@ -814,8 +814,7 @@
             font-size: 14px;
             transition: var(--transition);
         }
-        
-        #feedback form button[type="submit"]:hover:not(:disabled) {
+#feedback form button[type="submit"]:hover:not(:disabled) {
             background-color: var(--secondary-color);
         }
         
@@ -1272,8 +1271,7 @@ gap: 20px;
         .message {
             position: relative;
         }
-        
-        .delete-message-btn {
+.delete-message-btn {
             position: absolute;
             bottom: 5px;
             right: -30px;
@@ -1414,31 +1412,28 @@ gap: 20px;
             background-color: var(--gray-color);
             border-radius: 50%;
             margin: 0 2px;
-            animation: typing 1.4s infinite ease-in-out;
+            animation: typingBounce 1.4s infinite ease-in-out;
         }
 
-        .typing-dot:nth-child(1) {
-            animation-delay: 0s;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
+        @keyframes typingBounce {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
         }
 
         @keyframes typing {
-
-            0%,
-            60%,
-            100% {
+            0%, 60%, 100% {
                 transform: translateY(0);
+                opacity: 0.4;
             }
-
             30% {
-                transform: translateY(-5px);
+                transform: translateY(-10px);
+                opacity: 1;
             }
         }
     </style>
@@ -3265,7 +3260,7 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
                         }
                     }
                     
-                    const weekNumber = Math.ceil(now.getDate() / 7);
+const weekNumber = Math.ceil(now.getDate() / 7);
                     periodText = `${now.getFullYear()}年${now.getMonth() + 1}月第${weekNumber}周`;
                 } else {
                     // 生成最近30天的日期标签（每3天一个点）
@@ -3507,24 +3502,16 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
             });
         });
 
-        // 点击模态框外部关闭
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', function (e) {
-                if (e.target === this) {
-                    this.classList.remove('active');
-                }
-            });
-        });
-
         // 表单提交处理
         document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', function (e) {
+            form.addEventListener('submit', async function (e) {
                 e.preventDefault();
                 const formId = this.id;
                 
                 // 处理数据记录表单
                 if (formId && formId.includes('-form') && !formId.includes('edit')) {
                     let recordType, newRecord;
+                    let apiType, apiValue, apiUnit, apiNotes;
                     
                     // 根据表单类型创建新记录
                     if (formId === 'bg-form') {
@@ -3539,6 +3526,11 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
                         }
                         
                         recordType = 'blood-glucose';
+                        apiType = 'bloodGlucose';
+                        apiValue = value;
+                        apiUnit = 'mg/dL';
+                        apiNotes = `测量时间: ${time} ${notes ? ', ' + notes : ''}`;
+                        
                         newRecord = {
                             id: Date.now().toString(),
                             value: value,
@@ -3558,6 +3550,11 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
                         }
                          
                         recordType = 'diet';
+                        apiType = 'diet';
+                        apiValue = carbs;
+                        apiUnit = 'g';
+                        apiNotes = `餐次: ${meal}, 用餐时间: ${time}, 内容: ${content}`;
+                        
                         newRecord = {
                             id: Date.now().toString(),
                             meal: meal,
@@ -3578,6 +3575,11 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
                         }
                         
                         recordType = 'exercise';
+                        apiType = 'exercise';
+                        apiValue = duration;
+                        apiUnit = '分钟';
+                        apiNotes = `运动类型: ${type}, 运动时间: ${time} ${notes ? ', ' + notes : ''}`;
+                        
                         newRecord = {
                             id: Date.now().toString(),
                             type: type,
@@ -3598,6 +3600,11 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
                         }
                         
                         recordType = 'medication';
+                        apiType = 'medication';
+                        apiValue = dose;
+                        apiUnit = '';
+                        apiNotes = `药物名称: ${name}, 用药时间: ${time} ${notes ? ', ' + notes : ''}`;
+                        
                         newRecord = {
                             id: Date.now().toString(),
                             name: name,
@@ -3606,33 +3613,56 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
                             notes: notes
                         };
                     }
-                    // 将新记录添加到数据中
+                    
+                    // 将新记录保存到后端数据库
                     if (recordType && newRecord) {
-                        let dataKey;
-                        if (recordType === 'blood-glucose') {
-                            dataKey = 'bloodglucose';
-                        } else {
-                            dataKey = recordType.replace('-', '');
+                        try {
+                            // 获取当前用户ID
+                            const userId = window.apiClient.getCurrentUserId();
+                            
+                            // 调用后端API保存数据
+                            const result = await window.apiClient.saveHealthData(
+                                userId, 
+                                apiType, 
+                                apiValue, 
+                                apiUnit, 
+                                apiNotes
+                            );
+                            
+                            if (result.success) {
+                                // 同时保存到localStorage用于前端显示
+                                let dataKey;
+                                if (recordType === 'blood-glucose') {
+                                    dataKey = 'bloodglucose';
+                                } else {
+                                    dataKey = recordType.replace('-', '');
+                                }
+                                
+                                // 确保数据数组已初始化
+                                if (!window.sampleData[dataKey]) {
+                                    window.sampleData[dataKey] = [];
+                                }
+                                
+                                // 添加新记录到前端数据
+                                window.sampleData[dataKey].push(newRecord);
+                                // 保存数据到localStorage
+                                saveSampleData();
+                                
+                                // 重置表单
+                                this.reset();
+                                
+                                // 重新渲染记录
+                                renderRecords(recordType);
+                                
+                                // 显示成功提示
+                                alert('记录添加成功！数据已保存到数据库。');
+                            } else {
+                                throw new Error(result.message || '保存失败');
+                            }
+                        } catch (error) {
+                            console.error('保存数据失败:', error);
+                            alert('保存数据失败，请检查网络连接或稍后重试。错误信息: ' + error.message);
                         }
-                        
-                        // 确保数据数组已初始化
-                        if (!window.sampleData[dataKey]) {
-                            window.sampleData[dataKey] = [];
-                        }
-                        
-                        // 添加新记录
-                        window.sampleData[dataKey].push(newRecord);
-                        // 保存数据到localStorage
-                        saveSampleData();
-                        
-                        // 重置表单
-                        this.reset();
-                        
-                        // 重新渲染记录
-                        renderRecords(recordType);
-                        
-                        // 显示成功提示
-                        alert('记录添加成功！');
                     }
                 } else if (formId === 'login-form' || formId === 'register-form') {
                     // 处理登录和注册表单（保持原有逻辑）
