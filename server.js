@@ -4,11 +4,11 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const path = require('path');
 
-// 确保使用MongoDB模型
-const { connectDB, User, HealthRecord, generateAIReport } = require('./mongodb');
-
-// 加载环境变量
+// 加载环境变量（必须在导入mongodb之前）
 dotenv.config();
+
+// 确保使用MongoDB模型 - 修复：添加缺失的模型导入
+const { connectDB, User, HealthRecord, Post, Comment, AIReport, generateAIReport } = require('./mongodb');
 
 const app = express();
 
@@ -570,8 +570,103 @@ app.post('/api/community/posts/:postId/comments', async (req, res) => {
     }
 });
 
+// 数据库连接测试API - 专门测试Atlas连接
+app.get('/api/test-atlas', async (req, res) => {
+    try {
+        console.log('开始测试Atlas数据库连接...');
+        
+        // 获取当前环境信息
+        const envInfo = {
+            NODE_ENV: process.env.NODE_ENV || '未设置',
+            MONGODB_URI: process.env.MONGODB_URI ? '已设置（隐藏）' : '未设置',
+            VERCEL: process.env.VERCEL ? '是' : '否',
+            PORT: process.env.PORT || '3000'
+        };
+        
+        console.log('环境信息:', envInfo);
+        
+        // 检查数据库连接状态
+        const mongoose = require('mongoose');
+        const db = mongoose.connection;
+        
+        const connectionStatus = {
+            readyState: db.readyState,
+            state: getConnectionState(db.readyState),
+            host: db.host || '未知',
+            name: db.name || '未知',
+            port: db.port || '未知'
+        };
+        
+        console.log('数据库连接状态:', connectionStatus);
+        
+        // 如果数据库已连接，获取统计信息
+        let statistics = {};
+        let collections = [];
+        if (db.readyState === 1) {
+            try {
+                // 获取所有集合名称
+                const dbCollections = await db.db.listCollections().toArray();
+                collections = dbCollections.map(col => col.name);
+                
+                statistics = {
+                    users: await User.countDocuments(),
+                    healthRecords: await HealthRecord.countDocuments(),
+                    posts: await Post.countDocuments(),
+                    comments: await Comment.countDocuments(),
+                    aiReports: await AIReport.countDocuments(),
+                    collections: collections
+                };
+                console.log('数据库统计信息:', statistics);
+            } catch (dbError) {
+                console.error('获取数据库统计信息失败:', dbError);
+                statistics = { 
+                    error: dbError.message,
+                    collections: collections
+                };
+            }
+        }
+        
+        // 返回详细的测试结果
+        res.json({
+            success: true,
+            message: 'Atlas数据库连接测试完成',
+            environment: envInfo,
+            database: connectionStatus,
+            statistics: statistics,
+            timestamp: new Date().toISOString(),
+            server: process.env.VERCEL ? 'Vercel部署环境' : '本地开发环境'
+        });
+        
+    } catch (error) {
+        console.error('Atlas数据库测试错误:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Atlas数据库测试失败',
+            error: error.message,
+            environment: {
+                NODE_ENV: process.env.NODE_ENV || '未设置',
+                MONGODB_URI: process.env.MONGODB_URI ? '已设置' : '未设置',
+                VERCEL: process.env.VERCEL ? '是' : '否',
+                PORT: process.env.PORT || '3000'
+            },
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
+// 辅助函数：获取连接状态描述
+function getConnectionState(readyState) {
+    switch (readyState) {
+        case 0: return '断开连接';
+        case 1: return '已连接';
+        case 2: return '连接中';
+        case 3: return '断开连接中';
+        default: return '未知状态';
+    }
+}
+
 // 修改服务器启动部分
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Vercel环境特殊处理
 if (process.env.VERCEL) {
@@ -583,5 +678,7 @@ if (process.env.VERCEL) {
         console.log(`糖域卫士服务器运行在: http://localhost:${PORT}`);
         console.log(`主页面: http://localhost:${PORT}/tangyu.html`);
         console.log(`登录页面: http://localhost:${PORT}/simple_login.html`);
+        console.log(`Atlas数据库测试: http://localhost:${PORT}/api/test-atlas`);
+        console.log(`健康检查: http://localhost:${PORT}/api/health`);
     });
 }

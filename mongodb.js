@@ -1,16 +1,69 @@
 const mongoose = require('mongoose');
 
-// 数据库连接配置
+// 数据库连接配置 - 修复版本
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/tangyu_guardian';
 
-// 连接数据库
+// 连接选项 - 移除过时的选项
+const mongooseOptions = {
+    serverSelectionTimeoutMS: 10000, // 10秒超时
+    socketTimeoutMS: 45000, // 45秒socket超时
+    maxPoolSize: 10, // 最大连接池大小
+    retryWrites: true,
+    w: 'majority'
+};
+
+// 连接数据库 - 修复版本
 async function connectDB() {
     try {
-        await mongoose.connect(MONGODB_URI);
-        console.log('MongoDB连接成功');
+        console.log('正在连接数据库...');
+        console.log('环境:', process.env.NODE_ENV || '未设置');
+        console.log('连接字符串:', MONGODB_URI.includes('@') ? 
+            MONGODB_URI.replace(/mongodb\+srv:\/\/([^:]+):([^@]+)@/, 'mongodb+srv://***:***@') : 
+            MONGODB_URI);
+        
+        // 检查是否是Atlas连接
+        const isAtlas = MONGODB_URI.includes('mongodb+srv');
+        if (isAtlas) {
+            console.log('🔗 检测到Atlas连接，尝试连接到云端数据库...');
+        } else {
+            console.log('💻 检测到本地连接，尝试连接到本地数据库...');
+        }
+        
+        await mongoose.connect(MONGODB_URI, mongooseOptions);
+        
+        console.log('✅ MongoDB连接成功');
+        console.log('数据库名称:', mongoose.connection.name);
+        console.log('数据库主机:', mongoose.connection.host);
+        console.log('连接状态:', mongoose.connection.readyState === 1 ? '已连接' : '断开');
+        
+        if (isAtlas) {
+            console.log('🎉 Atlas数据库连接成功！');
+        }
+        
     } catch (error) {
-        console.error('MongoDB连接失败:', error);
-        process.exit(1);
+        console.error('❌ MongoDB连接失败:');
+        console.error('错误信息:', error.message);
+        console.error('连接字符串:', MONGODB_URI.includes('@') ? 
+            MONGODB_URI.replace(/mongodb\+srv:\/\/([^:]+):([^@]+)@/, 'mongodb+srv://***:***@') : 
+            MONGODB_URI);
+        
+        // 如果是Atlas连接失败，提供诊断信息
+        if (MONGODB_URI.includes('mongodb+srv')) {
+            console.error('🔍 Atlas连接诊断:');
+            console.error('- 请检查网络连接');
+            console.error('- 确认Atlas集群IP白名单设置');
+            console.error('- 确认数据库用户权限');
+            console.error('- 确认连接字符串格式正确');
+            console.error('- 尝试ping cluster0.ihsrdnh.mongodb.net 检查网络连通性');
+        } else {
+            console.error('🔍 本地连接诊断:');
+            console.error('- 请确保MongoDB服务已启动');
+            console.error('- 检查端口27017是否被占用');
+            console.error('- 尝试运行 "mongod" 命令启动服务');
+        }
+        
+        // 不退出进程，让服务器继续运行（可以处理其他请求）
+        console.error('⚠️ 数据库连接失败，但服务器继续运行...');
     }
 }
 
