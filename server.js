@@ -114,7 +114,7 @@ app.post('/api/register', async (req, res) => {
             success: false,
             message: '服务器内部错误',
             error: error.message
-        });
+});
     }
 });
 
@@ -184,9 +184,6 @@ app.get('/api/health-data/:userId', async (req, res) => {
         const { userId } = req.params;
 
         // 修改用户ID验证逻辑：支持多种格式
-        // 1. MongoDB ObjectId格式 (23-24位十六进制)
-        // 2. 前端生成的demo-xxx格式
-        // 3. 前端生成的user-xxx格式
         const isValidUserId = userId.match(/^[0-9a-fA-F]{23,24}$/) || 
                              userId.startsWith('demo-') || 
                              userId.startsWith('user-');
@@ -345,7 +342,7 @@ app.get('/api/ai-report/:userId/:period', async (req, res) => {
         if (!isValidUserId) {
             return res.status(400).json({
                 success: false,
-                message: '无效的用户ID格式'
+              message: '无效的用户ID格式'
             });
         }
 
