@@ -66,14 +66,8 @@
             box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
         }
         
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
         .login-button {
-            flex: 1;
+            width: 100%;
             padding: 10px;
             background-color: #1890ff;
             color: white;
@@ -92,82 +86,40 @@
             background-color: #096dd9;
         }
         
-        .register-button {
-            flex: 1;
-            padding: 10px;
-            background-color: #1890ff;
-            color: white;
-            border: none;
+        .demo-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f6ffed;
+            border: 1px solid #b7eb8f;
             border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .register-button:hover {
-            background-color: #40a9ff;
-        }
-        
-        .register-button:active {
-            background-color: #096dd9;
-        }
-        
-        .forgot-password {
-            display: block;
-            margin-top: 15px;
-            color: #1890ff;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        
-        .forgot-password:hover {
-            color: #40a9ff;
-            text-decoration: underline;
-        }
-        
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 30px 0;
-        }
-        
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background-color: #e8e8e8;
-        }
-        
-        .divider-text {
-            padding: 0 10px;
-            color: #999;
-            font-size: 14px;
+            font-size: 12px;
+            color: #52c41a;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h1 style="color: #333; margin-bottom: 10px;">欢迎登录</h1>
-        <p style="color: #666; margin-bottom: 25px;">请输入您的账号密码</p>
+        <div class="logo">糖域卫士</div>
         <form id="loginForm">
             <div class="form-group">
-                <label for="username">用户名</label>
-                <input type="text" id="username" placeholder="请输入用户名" required>
+                <label for="username">账号</label>
+                <input type="text" id="username" placeholder="请输入账号" required>
             </div>
             <div class="form-group">
                 <label for="password">密码</label>
                 <input type="password" id="password" placeholder="请输入密码" required>
             </div>
-            <div class="button-group">
-                <button type="submit" class="login-button">登录</button>
-                <button type="button" class="register-button" onclick="window.location.href='register.html'">注册</button>
-            </div>
-            <a href="forgot_password.html" class="forgot-password">忘记密码? 点击这里</a>
+            <button type="submit" class="login-button">登录</button>
         </form>
+        
+        <div class="demo-info">
+            <strong>演示信息：</strong><br>
+            您可以输入任意用户名和密码进行登录演示
+        </div>
     </div>
 
     <script>
-        // 登录表单处理 - 改为与login.html一致
+        // 登录表单处理
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -186,22 +138,26 @@
             loginButton.textContent = '登录中...';
             
             try {
-                // 使用API客户端进行登录 - 与login.html一致
+                // 使用API客户端进行登录
                 console.log('开始登录流程...');
                 const result = await apiClient.loginUser(username, password);
                 
                 console.log('登录API返回结果:', result);
                 
                 if (result && result.success) {
-                    // 登录成功，保存服务器返回的真实用户信息 - 与login.html一致
+                    // 登录成功，保存服务器返回的真实用户信息
                     const userData = result.user;
                     
-                    // 直接使用服务器返回的用户ID格式（MongoDB ObjectId）- 与统一格式要求一致
+                    // 确保用户ID是纯ObjectId格式（移除可能的前缀）
+                    if (userData.id && (userData.id.startsWith('user-') || userData.id.startsWith('demo-'))) {
+                        userData.id = userData.id.substring(5);
+                    }
+                    
                     localStorage.setItem('currentUser', JSON.stringify(userData));
                     
                     console.log('登录成功，已保存用户信息:', userData);
                     
-                    // 跳转到主页面 - 与login.html一致
+                    // 跳转到主页面
                     window.location.href = 'tangyu.html';
                 } else {
                     alert(result?.message || '登录失败，请检查用户名和密码');
@@ -210,13 +166,13 @@
                 console.error('登录过程发生错误:', error);
                 alert('登录失败，请检查网络连接后重试');
             } finally {
-                // 恢复按钮状态 - 与login.html一致
+                // 恢复按钮状态
                 loginButton.disabled = false;
                 loginButton.textContent = '登录';
             }
         });
         
-        // 为输入框添加键盘事件支持 - 与login.html一致
+        // 为输入框添加键盘事件支持
         document.getElementById('username').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 document.getElementById('password').focus();
@@ -227,6 +183,13 @@
             if (e.key === 'Enter') {
                 document.getElementById('loginForm').dispatchEvent(new Event('submit'));
             }
+        });
+        
+        // 自动填充演示账号（可选）
+        document.addEventListener('DOMContentLoaded', function() {
+            // 可以在这里设置默认的演示账号
+            // document.getElementById('username').value = 'demo';
+            // document.getElementById('password').value = 'demo123';
         });
     </script>
 </body>

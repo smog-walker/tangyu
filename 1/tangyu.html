@@ -9,6 +9,68 @@
     <script src="testAPI.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // 初始化饼图
+        function initMealRatioChart() {
+            const ctx = document.getElementById('mealRatioChart');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['蔬菜', '主食', '肉类'],
+                        datasets: [{
+                            data: [50, 30, 20],
+                            backgroundColor: [
+                                '#52c41a', // 绿色 - 蔬菜
+                                '#faad14', // 黄色 - 主食
+                                '#f5222d'  // 红色 - 肉类
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.label + ': ' + context.parsed + '%';
+                                    }
+                                }
+                            }
+                        },
+                        cutout: '60%',
+                        animation: {
+                            animateRotate: true,
+                            animateScale: true
+                        }
+                    }
+                });
+            }
+        }
+        
+        // 页面加载完成后初始化图表
+        document.addEventListener('DOMContentLoaded', function() {
+            // 当切换到饮食记录标签时初始化图表
+            const dietTabBtn = document.querySelector('.tab-btn[data-tab="diet"]');
+            if (dietTabBtn) {
+                dietTabBtn.addEventListener('click', function() {
+                    setTimeout(initMealRatioChart, 100);
+                });
+            }
+            
+            // 如果当前已经是饮食记录标签，直接初始化图表
+            const dietTabContent = document.getElementById('diet');
+            if (dietTabContent && dietTabContent.classList.contains('active')) {
+                initMealRatioChart();
+            }
+        });
+    </script>
+    <script>
         // 立即检查登录状态，防止页面内容闪烁
         (function() {
             // 检查是否已登录
@@ -644,7 +706,7 @@
 
         .report-card {
             border: 1px solid var(--light-gray);
-border-radius: 10px;
+            border-radius: 10px;
             padding: 20px;
             background-color: var(--white);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -777,7 +839,7 @@ border-radius: 10px;
             padding: 20px;
             border-radius: 8px;
             margin-top: 20px;
-}
+        }
         
         #feedback form .form-group {
             margin-bottom: 15px;
@@ -814,7 +876,8 @@ border-radius: 10px;
             font-size: 14px;
             transition: var(--transition);
         }
-#feedback form button[type="submit"]:hover:not(:disabled) {
+        
+        #feedback form button[type="submit"]:hover:not(:disabled) {
             background-color: var(--secondary-color);
         }
         
@@ -842,7 +905,8 @@ border-radius: 10px;
             width: 1em;
             margin-left: -1em;
         }
-/* 加载状态样式 */
+        
+        /* 加载状态样式 */
         .loading {
             text-align: center;
             padding: 40px;
@@ -896,7 +960,7 @@ border-radius: 10px;
 
         .community-actions {
             display: flex;
-gap: 20px;
+            gap: 20px;
             padding-top: 15px;
             border-top: 1px solid var(--light-gray);
         }
@@ -961,7 +1025,7 @@ gap: 20px;
         }
 
         /* 标签页样式 */
-.tab-buttons {
+        .tab-buttons {
             display: flex;
             gap: 10px;
             margin-bottom: 25px;
@@ -977,7 +1041,7 @@ gap: 20px;
             border-radius: 8px;
             cursor: pointer;
             transition: var(--transition);
-}
+        }
 
         .tab-btn:hover {
             border-color: var(--primary-color);
@@ -1242,6 +1306,7 @@ gap: 20px;
         }
 
         .message-text {
+            padding: 12px 16px;
             border-radius: 18px;
             line-height: 1.5;
             word-wrap: break-word;
@@ -1378,7 +1443,6 @@ gap: 20px;
             white-space: nowrap;
         }
 
-    
 
         /* 响应式设计 */
         @media (max-width: 768px) {
@@ -1412,29 +1476,52 @@ gap: 20px;
             background-color: var(--gray-color);
             border-radius: 50%;
             margin: 0 2px;
-            animation: typingBounce 1.4s infinite ease-in-out;
+            animation: typing 1.4s infinite ease-in-out;
         }
 
-        @keyframes typingBounce {
-            0%, 60%, 100% {
-                transform: translateY(0);
-                opacity: 0.4;
-            }
-            30% {
-                transform: translateY(-10px);
-                opacity: 1;
-            }
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
         }
 
         @keyframes typing {
-            0%, 60%, 100% {
+
+            0%,
+            60%,
+            100% {
                 transform: translateY(0);
-                opacity: 0.4;
             }
+
             30% {
-                transform: translateY(-10px);
-                opacity: 1;
+                transform: translateY(-5px);
             }
+        }
+        
+        /* 食物糖量数据样式优化 */
+        .food-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .food-sugar-section h3 {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: 600;
+        }
+        
+        .food-sugar-section h4 {
+            color: var(--dark-color);
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 500;
         }
     </style>
     <style>
@@ -1442,214 +1529,6 @@ gap: 20px;
             text-decoration: none;
             color: inherit;
             display: block;
-        /* 食物糖量数据页面样式 */
-        .food-sugar-section {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .meal-recommendation {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .meal-recommendation h3 {
-            color: var(--secondary-color);
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
-
-        .chart-container {
-            margin: 20px auto;
-            max-width: 300px;
-        }
-
-        .chart-legend {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-
-        .color-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .food-search {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .food-search h3 {
-            color: var(--secondary-color);
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
-
-        .search-container {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        #food-search-input {
-            flex: 1;
-            min-width: 200px;
-            padding: 12px 15px;
-            border: 1px solid var(--light-gray);
-            border-radius: 8px;
-            font-size: 15px;
-        }
-
-        .category-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-
-        .category-btn {
-            padding: 8px 16px;
-            border: 1px solid var(--light-gray);
-            background: white;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 14px;
-        }
-
-        .category-btn.active,
-        .category-btn:hover {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-
-        .food-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .food-item {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .food-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .food-image {
-            width: 100%;
-            height: 180px;
-            overflow: hidden;
-        }
-
-        .food-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .food-item:hover .food-image img {
-            transform: scale(1.05);
-        }
-
-        .food-info {
-            padding: 15px;
-        }
-
-        .food-info h4 {
-            margin: 0 0 10px 0;
-            color: var(--secondary-color);
-            font-size: 18px;
-        }
-
-        .food-details {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .category-tag {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .category-tag.staple {
-            background: #FFE0B2;
-            color: #E65100;
-        }
-
-        .category-tag.fruit {
-            background: #C8E6C9;
-            color: #2E7D32;
-        }
-
-        .category-tag.dairy {
-            background: #E1F5FE;
-            color: #0277BD;
-        }
-
-        .nutrition-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-            color: var(--gray-color);
-        }
-
-        .gi-rating {
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 11px;
-            font-weight: 500;
-        }
-
-        .gi-rating.high {
-            background: #FFCDD2;
-            color: #C62828;
-        }
-
-        .gi-rating.medium {
-            background: #FFF9C4;
-            color: #F57F17;
-        }
-
-        .gi-rating.low {
-            background: #C8E6C9;
-            color: #2E7D32;
-        }
-
         }
 
         .resource-card {
@@ -1702,25 +1581,6 @@ gap: 20px;
             border-radius: 8px;
         }
 
-        /*
-        function generateMockReport(period) {
-            // 这个函数不再使用，因为我们现在只使用真实数据
-            console.warn('模拟数据生成函数已被禁用，请使用真实用户数据');
-            return {
-                period: period === 'week' ? '2024年第1周' : '2024年1月',
-                bloodGlucoseReport: '<p>这是模拟数据报告，请确保使用真实用户数据。</p>',
-                lifestyleReport: '<p>模拟生活方式分析数据。</p>',
-                bgChart: {
-                    labels: ['01-01', '01-02', '01-03'],
-                    data: [120, 130, 125]
-                },
-                lifestyleChart: {
-                    data: [70, 80, 75, 85, 90]
-                }
-            };
-        }
-        */
-
         .back-button {
             display: inline-flex;
             align-items: center;
@@ -1750,6 +1610,8 @@ gap: 20px;
     <div class="sidebar">
          <div class="logo">糖域卫士<br><span style="font-size: 18px; color: var(--gray-color);">面向未来的持续性血糖监测与生活方式干预系统</span>
         </div>
+            
+
         <div class="nav-buttons">
             <button class="toolbar-button active nav-button" id="home-btn" data-section="home">
                 <i>🏠</i> 首页
@@ -1757,7 +1619,6 @@ gap: 20px;
             <button class="toolbar-button nav-button" id="data-records-btn" data-section="data-records">
                 <i>📊</i> 个人数据记录
             </button>
-            <!-- 添加食物糖量数据按钮 -->
             <button class="toolbar-button nav-button" id="food-sugar-btn" data-section="food-sugar">
                 <i>🍎</i> 食物糖量数据
             </button>
@@ -1777,9 +1638,9 @@ gap: 20px;
     </div>
 
     <!-- 右侧内容区域 -->
-    <div class="content">
-        <!-- 首页 -->
-        <div class="content-section active" id="home">
+        <div class="content">
+            <!-- 首页 -->
+            <div class="content-section active" id="home">
             <h2>🏠 欢迎使用糖域卫士</h2>
             <div class="home-container">
                 <p>糖域卫士是一款面向未来的持续性血糖监测与生活方式干预系统，旨在帮助用户更好地管理血糖健康。</p>
@@ -1796,6 +1657,164 @@ gap: 20px;
                     </div>
                     <div class="small-image">
                         <img src="./images/my-small3.jpg" alt="健康生活方式">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 食物糖量数据 -->
+        <div class="content-section" id="food-sugar">
+            <h2>🍎 食物糖量数据</h2>
+            
+            <!-- 每餐推荐摄入比例 -->
+            <div style="background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
+                <h3>每餐推荐摄入比例</h3>
+                <div style="display: flex; align-items: center; gap: 30px; flex-wrap: wrap;">
+                    <div style="width: 250px; height: 250px;">
+                        <canvas id="mealRatioChart"></canvas>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px; font-size: 18px;">
+                            <span style="display: inline-block; width: 25px; height: 25px; background-color: #52c41a; border-radius: 5px;"></span>
+                            <span>蔬菜: 50%</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px; font-size: 18px;">
+                            <span style="display: inline-block; width: 25px; height: 25px; background-color: #faad14; border-radius: 5px;"></span>
+                            <span>主食: 30%</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px; font-size: 18px;">
+                            <span style="display: inline-block; width: 25px; height: 25px; background-color: #f5222d; border-radius: 5px;"></span>
+                            <span>肉类: 20%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 食物糖量表 -->
+            <h3>常见食物糖量参考</h3>
+            
+            <!-- 搜索区域 -->
+            <div class="food-search-container" style="background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <input type="text" id="food-search-input" placeholder="搜索食物名称..." 
+                               style="width: 100%; padding: 12px 15px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 16px; outline: none; transition: border-color 0.3s ease;">
+                    </div>
+                    <button id="food-search-btn" 
+                            style="padding: 12px 30px; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease;">
+                        <i>🔍</i> 搜索
+                    </button>
+                    <button id="food-reset-btn" 
+                            style="padding: 12px 20px; background-color: #f5f5f5; color: var(--secondary-color); border: 1px solid #d9d9d9; border-radius: 8px; font-size: 16px; cursor: pointer; transition: all 0.3s ease;">
+                        重置
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 分类按钮组 -->
+            <div class="food-category-container" style="margin-bottom: 25px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+                    <button class="food-category-btn active" data-category="all"
+                            style="padding: 10px 20px; background-color: var(--primary-color); color: white; border: none; border-radius: 25px; font-size: 15px; cursor: pointer; transition: all 0.3s ease;">
+                        全部
+                    </button>
+                    <button class="food-category-btn" data-category="staple"
+                            style="padding: 10px 20px; background-color: #f0f0f0; color: var(--secondary-color); border: none; border-radius: 25px; font-size: 15px; cursor: pointer; transition: all 0.3s ease;">
+                        主食
+                    </button>
+                    <button class="food-category-btn" data-category="fruit"
+                            style="padding: 10px 20px; background-color: #f0f0f0; color: var(--secondary-color); border: none; border-radius: 25px; font-size: 15px; cursor: pointer; transition: all 0.3s ease;">
+                        水果
+                    </button>
+                    <button class="food-category-btn" data-category="vegetable"
+                            style="padding: 10px 20px; background-color: #f0f0f0; color: var(--secondary-color); border: none; border-radius: 25px; font-size: 15px; cursor: pointer; transition: all 0.3s ease;">
+                        蔬菜
+                    </button>
+                    <button class="food-category-btn" data-category="dairy"
+                            style="padding: 10px 20px; background-color: #f0f0f0; color: var(--secondary-color); border: none; border-radius: 25px; font-size: 15px; cursor: pointer; transition: all 0.3s ease;">
+                        乳制品
+                    </button>
+                    <button class="food-category-btn" data-category="high-gi"
+                            style="padding: 10px 20px; background-color: #f0f0f0; color: var(--secondary-color); border: none; border-radius: 25px; font-size: 15px; cursor: pointer; transition: all 0.3s ease;">
+                        高血糖指数
+                    </button>
+                    <button class="food-category-btn" data-category="low-gi"
+                            style="padding: 10px 20px; background-color: #f0f0f0; color: var(--secondary-color); border: none; border-radius: 25px; font-size: 15px; cursor: pointer; transition: all 0.3s ease;">
+                        低血糖指数
+                    </button>
+                </div>
+            </div>
+            
+            <div class="food-sugar-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;">
+                <!-- 食物项目1 -->
+                <div class="food-item" data-category="staple" data-gi="high" data-gi-value="83" style="background-color: rgba(255, 255, 255, 0.9); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
+                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                        <img src="miniprogram/images/米饭.jpg" alt="米饭" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;">
+                    </div>
+                    <div style="padding: 20px;">
+                        <h4 style="margin: 0 0 15px 0; color: var(--secondary-color); font-size: 20px;">米饭</h4>
+                        <p style="margin: 8px 0; color: var(--gray-color); font-size: 16px;">每100克含: <span style="color: var(--accent-color); font-weight: 600;">25.9克</span> 碳水化合物</p>
+                        <p style="margin: 8px 0; font-size: 15px; color: var(--gray-color);">血糖指数: <span style="color: #ff4d4f; font-weight: 500;">高 (83)</span></p>
+                    </div>
+                </div>
+
+                <!-- 食物项目2 -->
+                <div class="food-item" data-category="fruit" data-gi="medium" data-gi-value="39" style="background-color: rgba(255, 255, 255, 0.9); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
+                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                        <img src="miniprogram/images/苹果.jpg" alt="苹果" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;">
+                    </div>
+                    <div style="padding: 20px;">
+                        <h4 style="margin: 0 0 15px 0; color: var(--secondary-color); font-size: 20px;">苹果</h4>
+                        <p style="margin: 8px 0; color: var(--gray-color); font-size: 16px;">每100克含: <span style="color: var(--accent-color); font-weight: 600;">13.8克</span> 碳水化合物</p>
+                        <p style="margin: 8px 0; font-size: 15px; color: var(--gray-color);">血糖指数: <span style="color: #faad14; font-weight: 500;">中 (39)</span></p>
+                    </div>
+                </div>
+
+                <!-- 食物项目3 -->
+                <div class="food-item" data-category="staple" data-gi="high" data-gi-value="81" style="background-color: rgba(255, 255, 255, 0.9); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
+                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                        <img src="miniprogram/images/面条.jpg" alt="面条" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;">
+                    </div>
+                    <div style="padding: 20px;">
+                        <h4 style="margin: 0 0 15px 0; color: var(--secondary-color); font-size: 20px;">面条</h4>
+                        <p style="margin: 8px 0; color: var(--gray-color); font-size: 16px;">每100克含: <span style="color: var(--accent-color); font-weight: 600;">25.0克</span> 碳水化合物</p>
+                        <p style="margin: 8px 0; font-size: 15px; color: var(--gray-color);">血糖指数: <span style="color: #ff4d4f; font-weight: 500;">高 (81)</span></p>
+                    </div>
+                </div>
+
+                <!-- 食物项目4 -->
+                <div class="food-item" data-category="fruit" data-gi="medium" data-gi-value="51" style="background-color: rgba(255, 255, 255, 0.9); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
+                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                        <img src="miniprogram/images/香蕉.jpg" alt="香蕉" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;">
+                    </div>
+                    <div style="padding: 20px;">
+                        <h4 style="margin: 0 0 15px 0; color: var(--secondary-color); font-size: 20px;">香蕉</h4>
+                        <p style="margin: 8px 0; color: var(--gray-color); font-size: 16px;">每100克含: <span style="color: var(--accent-color); font-weight: 600;">22.8克</span> 碳水化合物</p>
+                        <p style="margin: 8px 0; font-size: 15px; color: var(--gray-color);">血糖指数: <span style="color: #faad14; font-weight: 500;">中 (51)</span></p>
+                    </div>
+                </div>
+                
+                <!-- 食物项目5 -->
+                <div class="food-item" data-category="staple" data-gi="high" data-gi-value="75" style="background-color: rgba(255, 255, 255, 0.9); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
+                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                        <img src="miniprogram/images/面包.jpg" alt="面包" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;">
+                    </div>
+                    <div style="padding: 20px;">
+                        <h4 style="margin: 0 0 15px 0; color: var(--secondary-color); font-size: 20px;">面包</h4>
+                        <p style="margin: 8px 0; color: var(--gray-color); font-size: 16px;">每100克含: <span style="color: var(--accent-color); font-weight: 600;">49.0克</span> 碳水化合物</p>
+                        <p style="margin: 8px 0; font-size: 15px; color: var(--gray-color);">血糖指数: <span style="color: #ff4d4f; font-weight: 500;">高 (75)</span></p>
+                    </div>
+                </div>
+                
+                <!-- 食物项目6 -->
+                <div class="food-item" data-category="dairy" data-gi="low" data-gi-value="30" style="background-color: rgba(255, 255, 255, 0.9); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
+                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                        <img src="miniprogram/images/牛奶.jpg" alt="牛奶" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;">
+                    </div>
+                    <div style="padding: 20px;">
+                        <h4 style="margin: 0 0 15px 0; color: var(--secondary-color); font-size: 20px;">牛奶</h4>
+                        <p style="margin: 8px 0; color: var(--gray-color); font-size: 16px;">每100克含: <span style="color: var(--accent-color); font-weight: 600;">4.8克</span> 碳水化合物</p>
+                        <p style="margin: 8px 0; font-size: 15px; color: var(--gray-color);">血糖指数: <span style="color: #52c41a; font-weight: 500;">低 (30)</span></p>
                     </div>
                 </div>
             </div>
@@ -1826,7 +1845,7 @@ gap: 20px;
                         </div>
                         <div class="form-group">
                             <label for="new-username">新用户名（选填，不修改请留空）</label>
-<input type="text" id="new-username" placeholder="请输入新用户名">
+                            <input type="text" id="new-username" placeholder="请输入新用户名">
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn btn-secondary" id="cancel-profile">取消</button>
@@ -1953,6 +1972,8 @@ gap: 20px;
                         </form>
                     </div>
 
+
+
                     <h3>饮食记录历史</h3>
                     <div class="record-grid" id="diet-records">
                         <!-- 饮食记录将通过JS动态加载 -->
@@ -2061,160 +2082,6 @@ gap: 20px;
         </div>
 
 
-        <!-- 食物糖量数据 -->
-        <div class="content-section" id="food-sugar">
-            <h2>🍎 食物糖量数据</h2>
-            <div class="food-sugar-section">
-                <!-- 每餐推荐摄入比例 -->
-                <div class="meal-recommendation">
-                    <h3>每餐推荐摄入比例</h3>
-                    <div class="chart-container">
-                        <canvas id="meal-chart" width="300" height="300"></canvas>
-                    </div>
-                    <div class="chart-legend">
-                        <div class="legend-item">
-                            <span class="color-dot" style="background-color: #4CAF50;"></span>
-                            <span>蔬菜 (50%)</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="color-dot" style="background-color: #FF9800;"></span>
-                            <span>主食 (30%)</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="color-dot" style="background-color: #F44336;"></span>
-                            <span>肉类 (20%)</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 食物搜索功能 -->
-                <div class="food-search">
-                    <h3>搜索食物</h3>
-                    <div class="search-container">
-                        <input type="text" id="food-search-input" placeholder="输入食物名称搜索...">
-                        <button id="search-btn" class="btn btn-primary">搜索</button>
-                        <button id="reset-search" class="btn btn-secondary">重置</button>
-                    </div>
-                </div>
-
-                <!-- 分类按钮组 -->
-                <div class="category-buttons">
-                    <button class="category-btn active" data-category="all">全部</button>
-                    <button class="category-btn" data-category="staple">主食</button>
-                    <button class="category-btn" data-category="fruit">水果</button>
-                    <button class="category-btn" data-category="vegetable">蔬菜</button>
-                    <button class="category-btn" data-category="meat">肉类</button>
-                    <button class="category-btn" data-category="dairy">乳制品</button>
-                    <button class="category-btn" data-category="beverage">饮料</button>
-                </div>
-
-                <!-- 食物列表 -->
-                <div class="food-list">
-                    <!-- 米饭 -->
-                    <div class="food-item" data-category="staple">
-                        <div class="food-image">
-                            
-                        </div>
-                        <div class="food-info">
-                            <h4>米饭</h4>
-                            <div class="food-details">
-                                <span class="category-tag staple">主食</span>
-                                <div class="nutrition-info">
-                                    <span>碳水化合物: 25.9g/100g</span>
-                                    <span class="gi-rating high">高GI (83)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 苹果 -->
-                    <div class="food-item" data-category="fruit">
-                        <div class="food-image">
-                      
-                        </div>
-                        <div class="food-info">
-                            <h4>苹果</h4>
-                            <div class="food-details">
-                                <span class="category-tag fruit">水果</span>
-                                <div class="nutrition-info">
-                                    <span>碳水化合物: 13.8g/100g</span>
-                                    <span class="gi-rating medium">中GI (39)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 面条 -->
-                    <div class="food-item" data-category="staple">
-                        <div class="food-image">
-                        
-                        </div>
-                        <div class="food-info">
-                            <h4>面条</h4>
-                            <div class="food-details">
-                                <span class="category-tag staple">主食</span>
-                                <div class="nutrition-info">
-                                    <span>碳水化合物: 25.0g/100g</span>
-                                    <span class="gi-rating high">高GI (81)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 香蕉 -->
-                    <div class="food-item" data-category="fruit">
-                        <div class="food-image">
-                    
-                        </div>
-                        <div class="food-info">
-                            <h4>香蕉</h4>
-                            <div class="food-details">
-                                <span class="category-tag fruit">水果</span>
-                                <div class="nutrition-info">
-                                    <span>碳水化合物: 22.8g/100g</span>
-                                    <span class="gi-rating medium">中GI (51)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 面包 -->
-                    <div class="food-item" data-category="staple">
-                        <div class="food-image">
-                          
-                        </div>
-                        <div class="food-info">
-                            <h4>面包</h4>
-                            <div class="food-details">
-                                <span class="category-tag staple">主食</span>
-                                <div class="nutrition-info">
-                                    <span>碳水化合物: 49.0g/100g</span>
-                                    <span class="gi-rating high">高GI (75)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 牛奶 -->
-                    <div class="food-item" data-category="dairy">
-                        <div class="food-image">
-                           
-                        </div>
-                        <div class="food-info">
-                            <h4>牛奶</h4>
-                            <div class="food-details">
-                                <span class="category-tag dairy">乳制品</span>
-                                <div class="nutrition-info">
-                                    <span>碳水化合物: 4.8g/100g</span>
-                                    <span class="gi-rating low">低GI (30)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- 个性化分析 -->
         <div class="content-section" id="personal-analysis">
             <h2>🔍 AI个性化分析</h2>
@@ -2247,7 +2114,7 @@ gap: 20px;
                                 <p>建议：继续保持良好的饮食和运动习惯，注意监测餐后血糖。</p>
                             </div>
                             <div class="report-actions">
-<div class="report-action">
+                                <div class="report-action">
                                     <i>📥</i> 下载报告
                                 </div>
                                 <div class="report-action">
@@ -2415,7 +2282,7 @@ gap: 20px;
                                 <div class="community-date">2023-06-18</div>
                             </div>
                             <div class="community-content">
-                                最近发现早晨空腹血糖总是偏高，即使晚餐吃得很少 nonetheless。有没有糖友有类似经验？如何有效应对清晨高血糖现象？
+                                最近发现早晨空腹血糖总是偏高，即使晚餐吃得很少也是如此。有没有糖友有类似经验？如何有效应对清晨高血糖现象？
                             </div>
                             <div class="community-actions">
                                 <div class="community-action like-btn" data-post-id="1">
@@ -2795,235 +2662,7 @@ gap: 20px;
                         <input type="text" id="edit-record-value">
                     </div>
                     <div class="form-group">
-<label for="edit-record-notes">备注</label>
-                        <textarea id="edit-record-notes" rows="3"></textarea>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancel-edit">取消</button>
-                        <button type="submit" class="btn btn-primary">保存修改</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="modal" id="commentModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">发表评论</div>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="comment-form">
-                    <div class="form-group">
-                        <label for="comment-content">评论内容</label>
-                        <textarea id="comment-content" rows="4" placeholder="请输入您的评论..."></textarea>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancel-comment">取消</button>
-                        <button type="submit" class="btn btn-primary">发表评论</button>
-                    </div>
-                </form>
-
-                <div id="comments-list"
-                    style="margin-top: 20px; border-top: 1px solid var(--light-gray); padding-top: 15px;">
-                    <h4>已有评论</h4>
-                    <div id="comments-container">
-                        <!-- 评论将通过JS动态加载 -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- 医生咨询模态框 -->
-    <div class="modal" id="consultModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title" id="consult-title">在线咨询</div>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="consult-form">
-                    <div class="form-group">
-                        <label for="consult-doctor">咨询医生</label>
-                        <input type="text" id="consult-doctor" readonly>
-                    </div>
-
-        // ... existing code ...
-        </div>
-
-        <!-- 食物糖量数据 -->
-        <div class="content-section" id="food-sugar">
-            <h2>🍎 食物糖量数据</h2>
-            
-            <!-- 每餐推荐摄入比例 -->
-            <div style="background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
-                <h3>每餐推荐摄入比例</h3>
-                <div style="display: flex; align-items: center; gap: 30px; flex-wrap: wrap;">
-                    <div style="width: 250px; height: 250px;">
-                        <canvas id="mealRatioChart"></canvas>
-                    </div>
-                    <div style="flex: 1; min-width: 200px;">
-                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px; font-size: 18px;">
-                            <span style="display: inline-block; width: 25px; height: 25px; background-color: #52c41a; border-radius: 5px;"></span>
-                            <span>蔬菜: 50%</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px; font-size: 18px;">
-                            <span style="display: inline-block; width: 25px; height: 25px; background-color: #faad14; border-radius: 5px;"></span>
-                            <span>主食: 30%</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 15px; font-size: 18px;">
-                            <span style="display: inline-block; width: 25px; height: 25px; background-color: #f5222d; border-radius: 5px;"></span>
-                            <span>肉类: 20%</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 食物糖量表 -->
-            <h3>常见食物糖量参考</h3>
-            
-            <!-- 搜索区域 -->
-            <div class="food-search-container" style="background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
-                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                    <div style="flex: 1; min-width: 250px;">
-                        <input type="text" id="food-search-input" placeholder="搜索食物名称..." 
-                               style="width: 100%; padding: 12px 15px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 16px; outline: none; transition: border-color 0.3s ease;">
-                    </div>
-                    <button id="food-search-btn" 
-                            style="padding: 12px 30px; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease;">
-                        <i>🔍</i> 搜索
-                    </button>
-                    <button id="food-reset-btn" 
-                            style="padding: 12px 20px; background-color: #f5f5f5; color: var(--secondary-color); border: 1px solid #d9d9d9; border-radius: 8px; font-size: 16px; cursor: pointer; transition: all 0.3s ease;">
-                        重置
-                    </button>
-                </div>
-            </div>
-            
-            <!-- 分类按钮组 -->
-            <div class="food-category-container" style="margin-bottom: 25px;">
-                <div style="display: flex; flex-wrap: wrap; gap: 12px;">
-                    <button class="food-category-btn active" data-category="all"
-                            style="padding: 10px 20px; background-color: var(--primary-color); color: white; border: none; border-radius: 25px; font-size: 15px; cursor: pointer; transition: all 0.3s ease;">
-                        全部
-                    </button>
-                    <button class="food-category-btn" data-category="staple"
-                            style="padding: 10px 20px; background-color: #f0f0f0; color: var(--secondary-color); border: none; border-radius: 25px; font-size: 15px; cursor: pointer; transition: all 0.3s ease;">
-                        主食
-                    </button>
-                    <button class="food-category-btn" data-category="fruit"
-                            style="padding: 10px 20px; background-color: #f0f0f0; color: var(--secondary-color); border: none; border-radius: 25px; font-size: 15px; cursor: pointer; transition: all 0.3s ease;">
-                        水果
-                    </button>
-                    <button class="food-category-btn" data-category="vegetable"
-                            style="padding: 10px 20px; background-color: #f0f0f0; color: var(--secondary-color); border: none; border-radius: 25px; font-size: 15px; cursor: pointer; transition: all 0.3s ease;">
-                        蔬菜
-                    </button>
-                    <button class="food-category-btn" data-category="dairy"
-                            style="padding: 10px 20px; background-color: #f0f0f0; color: var(--secondary-color); border: none; border-radius: 25px; font-size: 15px; cursor: pointer; transition: all 0.3s ease;">
-                        乳制品
-                    </button>
-                    <button class="food-category-btn" data-category="high-gi"
-                            style="padding: 10px 20px; background-color: #f0f0f0; color: var(--secondary-color); border: none; border-radius: 25px; font-size: 15px; cursor: pointer; transition: all 0.3s ease;">
-                        高血糖指数
-                    </button>
-                    <button class="food-category-btn" data-category="low-gi"
-                            style="padding: 10px 20px; background-color: #f0f0f0; color: var(--secondary-color); border: none; border-radius: 25px; font-size: 15px; cursor: pointer; transition: all 0.3s ease;">
-                        低血糖指数
-                    </button>
-                </div>
-            </div>
-            
-            <div class="food-sugar-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;">
-                <!-- 食物项目1 -->
-                <div class="food-item" data-category="staple" data-gi="high" data-gi-value="83" style="background-color: rgba(255, 255, 255, 0.9); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
-                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                        <img src="miniprogram/images/米饭.jpg" alt="米饭" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;">
-                    </div>
-                    <div style="padding: 20px;">
-                        <h4 style="margin: 0 0 15px 0; color: var(--secondary-color); font-size: 20px;">米饭</h4>
-                        <p style="margin: 8px 0; color: var(--gray-color); font-size: 16px;">每100克含: <span style="color: var(--accent-color); font-weight: 600;">25.9克</span> 碳水化合物</p>
-                        <p style="margin: 8px 0; font-size: 15px; color: var(--gray-color);">血糖指数: <span style="color: #ff4d4f; font-weight: 500;">高 (83)</span></p>
-                    </div>
-                </div>
-
-                <!-- 食物项目2 -->
-                <div class="food-item" data-category="fruit" data-gi="medium" data-gi-value="39" style="background-color: rgba(255, 255, 255, 0.9); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
-                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                        <img src="miniprogram/images/苹果.jpg" alt="苹果" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;">
-                    </div>
-                    <div style="padding: 20px;">
-                        <h4 style="margin: 0 0 15px 0; color: var(--secondary-color); font-size: 20px;">苹果</h4>
-                        <p style="margin: 8px 0; color: var(--gray-color); font-size: 16px;">每100克含: <span style="color: var(--accent-color); font-weight: 600;">13.8克</span> 碳水化合物</p>
-                        <p style="margin: 8px 0; font-size: 15px; color: var(--gray-color);">血糖指数: <span style="color: #faad14; font-weight: 500;">中 (39)</span></p>
-                    </div>
-                </div>
-
-                <!-- 食物项目3 -->
-                <div class="food-item" data-category="staple" data-gi="high" data-gi-value="81" style="background-color: rgba(255, 255, 255, 0.9); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
-                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                        <img src="miniprogram/images/面条.jpg" alt="面条" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;">
-                    </div>
-                    <div style="padding: 20px;">
-                        <h4 style="margin: 0 0 15px 0; color: var(--secondary-color); font-size: 20px;">面条</h4>
-                        <p style="margin: 8px 0; color: var(--gray-color); font-size: 16px;">每100克含: <span style="color: var(--accent-color); font-weight: 600;">25.0克</span> 碳水化合物</p>
-                        <p style="margin: 8px 0; font-size: 15px; color: var(--gray-color);">血糖指数: <span style="color: #ff4d4f; font-weight: 500;">高 (81)</span></p>
-                    </div>
-                </div>
-
-                <!-- 食物项目4 -->
-                <div class="food-item" data-category="fruit" data-gi="medium" data-gi-value="51" style="background-color: rgba(255, 255, 255, 0.9); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
-                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                        <img src="miniprogram/images/香蕉.jpg" alt="香蕉" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;">
-                    </div>
-                    <div style="padding: 20px;">
-                        <h4 style="margin: 0 0 15px 0; color: var(--secondary-color); font-size: 20px;">香蕉</h4>
-                        <p style="margin: 8px 0; color: var(--gray-color); font-size: 16px;">每100克含: <span style="color: var(--accent-color); font-weight: 600;">22.8克</span> 碳水化合物</p>
-                        <p style="margin: 8px 0; font-size: 15px; color: var(--gray-color);">血糖指数: <span style="color: #faad14; font-weight: 500;">中 (51)</span></p>
-                    </div>
-                </div>
-                
-                <!-- 食物项目5 -->
-                <div class="food-item" data-category="staple" data-gi="high" data-gi-value="75" style="background-color: rgba(255, 255, 255, 0.9); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
-                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                        <img src="miniprogram/images/面包.jpg" alt="面包" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;">
-                    </div>
-                    <div style="padding: 20px;">
-                        <h4 style="margin: 0 0 15px 0; color: var(--secondary-color); font-size: 20px;">面包</h4>
-                        <p style="margin: 8px 0; color: var(--gray-color); font-size: 16px;">每100克含: <span style="color: var(--accent-color); font-weight: 600;">49.0克</span> 碳水化合物</p>
-                        <p style="margin: 8px 0; font-size: 15px; color: var(--gray-color);">血糖指数: <span style="color: #ff4d4f; font-weight: 500;">高 (75)</span></p>
-                    </div>
-                </div>
-                
-                <!-- 食物项目6 -->
-                <div class="food-item" data-category="dairy" data-gi="low" data-gi-value="30" style="background-color: rgba(255, 255, 255, 0.9); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;">
-                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                        <img src="miniprogram/images/牛奶.jpg" alt="牛奶" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px 8px 0 0;">
-                    </div>
-                    <div style="padding: 20px;">
-                        <h4 style="margin: 0 0 15px 0; color: var(--secondary-color); font-size: 20px;">牛奶</h4>
-                        <p style="margin: 8px 0; color: var(--gray-color); font-size: 16px;">每100克含: <span style="color: var(--accent-color); font-weight: 600;">4.8克</span> 碳水化合物</p>
-                        <p style="margin: 8px 0; font-size: 15px; color: var(--gray-color);">血糖指数: <span style="color: #52c41a; font-weight: 500;">低 (30)</span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- 模态框 -->
-    <div class="modal" id="recordModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">编辑记录</div>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="edit-record-form">
-                    <div class="form-group">
-                        <label for="edit-record-value">数值</label>
-                        <input type="text" id="edit-record-value">
-                    </div>
-                    <div class="form-group">
-<label for="edit-record-notes">备注</label>
+                        <label for="edit-record-notes">备注</label>
                         <textarea id="edit-record-notes" rows="3"></textarea>
                     </div>
                     <div class="form-actions">
@@ -3114,7 +2753,7 @@ gap: 20px;
                         <input type="text" id="appointment-doctor" readonly>
                     </div>
                     <div class="form-group">
-<label for="appointment-date">预约日期</label>
+                        <label for="appointment-date">预约日期</label>
                         <input type="date" id="appointment-date">
                     </div>
                     <div class="form-group">
@@ -3186,9 +2825,9 @@ gap: 20px;
                     bloodSugarTab.classList.add('active');
                     
                     // 隐藏所有标签内容
-document.querySelectorAll('.data-tabs .tab-content').forEach(content => {
+                    document.querySelectorAll('.data-tabs .tab-content').forEach(content => {
                         content.classList.remove('active');
-});
+                    });
                     // 显示血糖记录内容
                     const bloodSugarContent = document.getElementById('blood-glucose');
                     if (bloodSugarContent) {
@@ -3298,7 +2937,15 @@ document.querySelectorAll('.data-tabs .tab-content').forEach(content => {
                     alert('登录过程中出现错误，请重试');
                 }
             }
-            // 填充个人信息表单 - 将函数定义移到调用之前
+
+            function logout() {
+                localStorage.removeItem('currentUser');
+                updateUIForLogout();
+            }
+
+
+
+            // 填充个人信息表单
             function populateProfileForm() {
                 const userData = JSON.parse(localStorage.getItem('currentUser'));
                 if (userData) {
@@ -3307,10 +2954,6 @@ document.querySelectorAll('.data-tabs .tab-content').forEach(content => {
                         currentUsernameInput.value = userData.username || '';
                     }
                 }
-            }
-            function logout() {
-                localStorage.removeItem('currentUser');
-                updateUIForLogout();
             }
 
             function updateUIForLogin() {
@@ -3373,134 +3016,6 @@ document.querySelectorAll('.data-tabs .tab-content').forEach(content => {
                 console.log('会话结束，用户登录状态已清除');
             });
             
-            // 初始化饼图
-            function initMealRatioChart() {
-                const ctx = document.getElementById('mealRatioChart');
-                if (ctx) {
-                    new Chart(ctx, {
-                        type: 'pie',
-                        data: {
-                            labels: ['蔬菜', '主食', '肉类'],
-                            datasets: [{
-                                data: [50, 30, 20],
-                                backgroundColor: [
-                                    '#52c41a', // 绿色 - 蔬菜
-                                    '#faad14', // 黄色 - 主食
-                                    '#f5222d'  // 红色 - 肉类
-                                ],
-                                borderWidth: 2,
-                                borderColor: '#ffffff'
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: true,
-                            plugins: {
-                                legend: {
-                                    display: false
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function(context) {
-                                            return context.label + ': ' + context.parsed + '%';
-                                        }
-                                    }
-                                }
-                            },
-                            cutout: '60%',
-                            animation: {
-                                animateRotate: true,
-                                animateScale: true
-                            }
-                        }
-                    });
-                }
-            }
-            
-            // 当切换到食物糖量数据页面时初始化图表
-            const foodSugarBtn = document.getElementById('food-sugar-btn');
-            if (foodSugarBtn) {
-                foodSugarBtn.addEventListener('click', function() {
-                    setTimeout(initMealRatioChart, 100);
-                });
-            }
-            
-            // 如果当前已经是食物糖量数据页面，直接初始化图表
-            const foodSugarSection = document.getElementById('food-sugar');
-            if (foodSugarSection && foodSugarSection.classList.contains('active')) {
-                initMealRatioChart();
-            }
-            
-            // 食物搜索功能
-            const searchInput = document.getElementById('food-search-input');
-            const searchBtn = document.getElementById('food-search-btn');
-            const resetBtn = document.getElementById('food-reset-btn');
-            const foodItems = document.querySelectorAll('.food-item');
-            const categoryBtns = document.querySelectorAll('.food-category-btn');
-            
-            if (searchBtn) {
-                searchBtn.addEventListener('click', function() {
-                    const searchTerm = searchInput.value.toLowerCase().trim();
-                    filterFoodItems(searchTerm);
-                });
-            }
-            
-            if (resetBtn) {
-                resetBtn.addEventListener('click', function() {
-                    searchInput.value = '';
-                    filterFoodItems('');
-                });
-            }
-            
-            if (searchInput) {
-                searchInput.addEventListener('keyup', function(event) {
-                    if (event.key === 'Enter') {
-                        const searchTerm = searchInput.value.toLowerCase().trim();
-                        filterFoodItems(searchTerm);
-                    }
-                });
-            }
-            
-            // 分类按钮功能
-            categoryBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    // 移除所有按钮的active类
-                    categoryBtns.forEach(b => b.classList.remove('active'));
-                    // 添加当前按钮的active类
-                    this.classList.add('active');
-                    
-                    const category = this.getAttribute('data-category');
-                    filterFoodByCategory(category);
-                });
-            });
-            
-            function filterFoodItems(searchTerm) {
-                foodItems.forEach(item => {
-                    const foodName = item.querySelector('h4').textContent.toLowerCase();
-                    if (foodName.includes(searchTerm) || searchTerm === '') {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            }
-            
-            function filterFoodByCategory(category) {
-                foodItems.forEach(item => {
-                    const itemCategory = item.getAttribute('data-category');
-                    const itemGI = item.getAttribute('data-gi');
-                    
-                    if (category === 'all' || 
-                        category === itemCategory || 
-                        (category === 'high-gi' && itemGI === 'high') ||
-                        (category === 'low-gi' && itemGI === 'low')) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            }
-            
             // 为导航按钮添加点击事件
             document.querySelectorAll('.toolbar-button, .user-management-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -3545,14 +3060,13 @@ document.querySelectorAll('.data-tabs .tab-content').forEach(content => {
 
 
 
-            // 填充个人信息表单
-            populateProfileForm();
             // 检查初始登录状态
             if (isLoggedIn()) {
                 updateUIForLogin();
             } else {
                 updateUIForLogout();
             }
+        });
 
             // 为个人信息修改表单添加事件监听
             const profileForm = document.getElementById('profile-form');
@@ -3668,7 +3182,7 @@ document.querySelectorAll('.data-tabs .tab-content').forEach(content => {
 
             // 添加注销功能
             const logoutBtn = document.getElementById('logout-btn');
-if (logoutBtn) {
+            if (logoutBtn) {
                 logoutBtn.addEventListener('click', function() {
                     if (confirm('确定要退出登录吗？')) {
                         logout();
@@ -3676,7 +3190,6 @@ if (logoutBtn) {
                     }
                 });
             }
-          });
         
         // 用户管理按钮点击事件
         document.querySelector('.user-management-btn').addEventListener('click', function () {
@@ -3689,7 +3202,7 @@ if (logoutBtn) {
             const container = document.getElementById(containerId);
             if (!container) return;
 
-container.querySelectorAll('.tab-btn').forEach(button => {
+            container.querySelectorAll('.tab-btn').forEach(button => {
                 button.addEventListener('click', function () {
                     const tabId = this.getAttribute('data-tab');
 
@@ -3758,7 +3271,7 @@ container.querySelectorAll('.tab-btn').forEach(button => {
                 );
                 
                 if (hasProblem) {
-console.log('检测到初始加载问题，重新加载报告...');
+                    console.log('检测到初始加载问题，重新加载报告...');
                     // 强制清空内容并显示加载状态
                     reportContent.innerHTML = '<div style="text-align: center; padding: 40px;"><div style="font-size: 24px; margin-bottom: 10px;">🔄</div><div>正在生成周报...</div></div>';
                     // 立即加载报告
@@ -3772,7 +3285,7 @@ console.log('检测到初始加载问题，重新加载报告...');
         // 增强的检查机制：多重时间点检查
         const checkIntervals = [100, 300, 500, 800, 1000]; // 多个时间点检查
         checkIntervals.forEach(interval => {
-setTimeout(checkAndLoadAIReport, interval);
+            setTimeout(checkAndLoadAIReport, interval);
         });
         
         // 监听DOMContentLoaded事件，确保在DOM完全加载后再检查一次
@@ -3836,7 +3349,7 @@ setTimeout(checkAndLoadAIReport, interval);
                     let bgClass = 'bg-normal';
                     if (record.value < 70) bgClass = 'bg-low';
                     else if (record.value > 180) bgClass = 'bg-high';
-valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>`;
+                    valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>`;
                 } else if (type === 'diet') {
                     valueDisplay = `<div class="record-value">碳水化合物: ${record.carbs}g</div>`;
                 } else if (type === 'exercise') {
@@ -3914,7 +3427,7 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
                     'lunch': '午餐',
                     'dinner': '晚餐',
                     'snack': '加餐'
-                },
+                }[record.meal] || '饮食记录',
                 'exercise': {
                     'walking': '步行',
                     'running': '跑步',
@@ -3923,251 +3436,11 @@ valueDisplay = `<div class="record-value ${bgClass}">${record.value} mg/dL</div>
                     'yoga': '瑜伽',
                     'strength': '力量训练',
                     'other': '其他运动'
-                },
+                }[record.type] || '运动记录',
                 'medication': '用药记录'
             };
 
-            // 如果是简单类型，直接返回
-            if (typeof typeMap[type] === 'string') {
-                return typeMap[type];
-            }
-            
-            // 如果是复杂类型且有记录数据，返回具体名称
-            if (record && typeMap[type]) {
-                if (type === 'diet' && record.meal) {
-                    return typeMap.diet[record.meal] || '饮食记录';
-                } else if (type === 'exercise' && record.type) {
-                    return typeMap.exercise[record.type] || '运动记录';
-                }
-            }
-            
-            // 默认返回基本类型名称
-            return type === 'diet' ? '饮食记录' : 
-                   type === 'exercise' ? '运动记录' : 
-                   typeMap[type] || '未知记录';
-        }
-
-        // 将API返回的数据格式转换为前端需要的格式 - 修复：使用真实数据而不是模拟数据
-        function transformApiReportToFrontendFormat(apiData, period) {
-            const now = new Date();
-            let periodText = '';
-            let labels = [];
-            let bgData = [];
-            
-            // 使用API返回的真实血糖数据，而不是模拟数据
-            if (apiData.bloodGlucoseRecords && apiData.bloodGlucoseRecords.length > 0) {
-                // 使用真实的血糖记录数据
-                const bgRecords = apiData.bloodGlucoseRecords;
-                
-                // 根据周期生成标签和数据
-                if (period === 'week') {
-                    // 生成最近7天的日期标签
-                    for (let i = 6; i >= 0; i--) {
-                        const date = new Date();
-                        date.setDate(now.getDate() - i);
-                        const dateStr = date.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' });
-                        labels.push(dateStr);
-                        
-                        // 查找对应日期的血糖值
-                        const recordForDate = bgRecords.find(record => {
-                            const recordDate = new Date(record.timestamp);
-                            return recordDate.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }) === dateStr;
-                        });
-                        
-                        // 使用真实数据，如果没有则使用平均值
-                        if (recordForDate) {
-                            bgData.push(recordForDate.value);
-                        } else {
-                            bgData.push(apiData.summary?.bloodGlucose?.average || 120);
-                        }
-                    }
-                    
-const weekNumber = Math.ceil(now.getDate() / 7);
-                    periodText = `${now.getFullYear()}年${now.getMonth() + 1}月第${weekNumber}周`;
-                } else {
-                    // 生成最近30天的日期标签（每3天一个点）
-                    for (let i = 27; i >= 0; i -= 3) {
-                        const date = new Date();
-                        date.setDate(now.getDate() - i);
-                        const dateStr = date.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' });
-                        labels.push(dateStr);
-                        
-                        // 查找对应日期的血糖值
-                        const recordForDate = bgRecords.find(record => {
-                            const recordDate = new Date(record.timestamp);
-                            return recordDate.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }) === dateStr;
-                        });
-                        
-                        // 使用真实数据，如果没有则使用平均值
-                        if (recordForDate) {
-                            bgData.push(recordForDate.value);
-                        } else {
-                            bgData.push(apiData.summary?.bloodGlucose?.average || 120);
-                        }
-                    }
-                    
-                    periodText = `${now.getFullYear()}年${now.getMonth() + 1}月`;
-                }
-            } else {
-                // 如果没有血糖记录数据，使用API返回的统计数据
-                const avgBg = apiData.summary?.bloodGlucose?.average || 120;
-                
-                if (period === 'week') {
-                    // 生成最近7天的日期标签
-                    for (let i = 6; i >= 0; i--) {
-                        const date = new Date();
-                        date.setDate(now.getDate() - i);
-                        labels.push(date.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }));
-                        bgData.push(avgBg); // 使用平均值
-                    }
-                    
-                    const weekNumber = Math.ceil(now.getDate() / 7);
-                    periodText = `${now.getFullYear()}年${now.getMonth() + 1}月第${weekNumber}周`;
-                } else {
-                    // 生成最近30天的日期标签（每3天一个点）
-                    for (let i = 27; i >= 0; i -= 3) {
-                        const date = new Date();
-                        date.setDate(now.getDate() - i);
-                        labels.push(date.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }));
-                        bgData.push(avgBg); // 使用平均值
-                    }
-                    
-                    periodText = `${now.getFullYear()}年${now.getMonth() + 1}月`;
-                }
-            }
-            
-            // 计算平均血糖 - 使用真实数据计算
-            const avgBg = bgData.length > 0 ? Math.round(bgData.reduce((sum, val) => sum + val, 0) / bgData.length) : 
-                        (apiData.summary?.bloodGlucose?.average || 120);
-            const bgStatusClass = avgBg < 80 ? 'bg-low' : avgBg > 150 ? 'bg-high' : 'bg-normal';
-            
-            // 生成血糖控制报告 - 使用真实统计数据
-            let bloodGlucoseReport = `
-                <p>本${period === 'week' ? '周' : '月'}您的平均血糖值为 <span class="${bgStatusClass}">${avgBg} mg/dL</span>，处于${avgBg < 80 ? '偏低' : avgBg > 150 ? '偏高' : '理想'}范围内。</p>
-            `;
-            
-            // 添加详细的血糖统计数据
-            if (apiData.summary?.bloodGlucose) {
-                const bgStats = apiData.summary.bloodGlucose;
-                bloodGlucoseReport += `
-                    <p>详细统计：</p>
-                    <ul>
-                        <li>测量次数：${bgStats.records || 0} 次</li>
-                        <li>最高值：${bgStats.maxValue || '--'} mg/dL</li>
-                        <li>最低值：${bgStats.minValue || '--'} mg/dL</li>
-                        <li>正常范围次数：${bgStats.normalCount || 0} 次</li>
-                        <li>偏高次数：${bgStats.highCount || 0} 次</li>
-                        <li>偏低次数：${bgStats.lowCount || 0} 次</li>
-                    </ul>
-                `;
-            }
-            
-            // 添加API返回的建议
-            if (apiData.recommendations && apiData.recommendations.length > 0) {
-                bloodGlucoseReport += '<p>个性化建议：</p><ul>';
-                apiData.recommendations.forEach(recommendation => {
-                    bloodGlucoseReport += `<li>${recommendation}</li>`;
-                });
-                bloodGlucoseReport += '</ul>';
-            }
-            
-            // 生成生活方式报告 - 使用真实数据
-            let lifestyleReport = '';
-            if (apiData.summary) {
-                if (apiData.summary.exercise) {
-                    const exercise = apiData.summary.exercise;
-                    lifestyleReport += `<p>本${period === 'week' ? '周' : '月'}您共进行了${exercise.count || 0}次运动，总时长${exercise.totalMinutes || 0}分钟，平均每次${exercise.averageDuration || 0}分钟。</p>`;
-                }
-                
-                if (apiData.summary.diet !== undefined) {
-                    lifestyleReport += `<p>饮食记录：${apiData.summary.diet} 次</p>`;
-                }
-                
-                if (apiData.summary.medication !== undefined) {
-                    lifestyleReport += `<p>用药记录：${apiData.summary.medication} 次</p>`;
-                }
-                
-                if (apiData.summary.sleepQuality !== undefined) {
-                    lifestyleReport += `<p>睡眠质量评分：${apiData.summary.sleepQuality}/100</p>`;
-                }
-                
-                if (apiData.summary.monitoringFrequency !== undefined) {
-                    lifestyleReport += `<p>血糖监测频率评分：${apiData.summary.monitoringFrequency}/100</p>`;
-                }
-            }
-            
-            // 如果生活方式报告为空，添加一些基本信息
-            if (!lifestyleReport) {
-                lifestyleReport = `
-                    <p>建议每周至少进行150分钟中等强度的有氧运动。</p>
-                    <p>保持均衡饮食，控制碳水化合物摄入。</p>
-                    <p>定期监测血糖，记录血糖变化趋势。</p>
-                `;
-            }
-            
-            // 生成生活方式雷达图数据 - 使用真实数据
-            const lifestyleChartData = [
-                apiData.summary?.exercise?.frequencyScore || 70, // 运动频率
-                Math.min(100, Math.max(0, (apiData.summary?.diet || 0) * 5)), // 饮食控制
-                apiData.summary?.sleepQuality || 70, // 睡眠质量
-                Math.min(100, Math.max(0, (apiData.summary?.medication || 0) * 10)), // 用药依从性
-                apiData.summary?.monitoringFrequency || 70  // 血糖监测频率
-            ];
-            
-            return {
-                period: periodText,
-                bloodGlucoseReport: bloodGlucoseReport,
-                lifestyleReport: lifestyleReport,
-                bgChart: {
-                    labels: labels,
-                    data: bgData
-                },
-                lifestyleChart: {
-                    data: lifestyleChartData
-                }
-            };
-        }
-
-        // 获取记录类型的中文名称
-        function getRecordTypeName(type, record = null) {
-            const typeMap = {
-                'blood-glucose': '血糖记录',
-                'diet': {
-                    'breakfast': '早餐',
-                    'lunch': '午餐',
-                    'dinner': '晚餐',
-                    'snack': '加餐'
-                },
-                'exercise': {
-                    'walking': '步行',
-                    'running': '跑步',
-                    'cycling': '骑行',
-                    'swimming': '游泳',
-                    'yoga': '瑜伽',
-                    'strength': '力量训练',
-                    'other': '其他运动'
-                },
-                'medication': '用药记录'
-            };
-
-            // 如果是简单类型，直接返回
-            if (typeof typeMap[type] === 'string') {
-                return typeMap[type];
-            }
-            
-            // 如果是复杂类型且有记录数据，返回具体名称
-            if (record && typeMap[type]) {
-                if (type === 'diet' && record.meal) {
-                    return typeMap.diet[record.meal] || '饮食记录';
-                } else if (type === 'exercise' && record.type) {
-                    return typeMap.exercise[record.type] || '运动记录';
-                }
-            }
-            
-            // 默认返回基本类型名称
-            return type === 'diet' ? '饮食记录' : 
-                   type === 'exercise' ? '运动记录' : 
-                   typeMap[type] || '未知记录';
+            return typeof typeMap === 'string' ? typeMap : typeMap[type];
         }
 
         // 格式化日期
@@ -4224,16 +3497,24 @@ const weekNumber = Math.ceil(now.getDate() / 7);
             });
         });
 
+        // 点击模态框外部关闭
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function (e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+          });
+        });
+
         // 表单提交处理
         document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', async function (e) {
+            form.addEventListener('submit', function (e) {
                 e.preventDefault();
                 const formId = this.id;
                 
                 // 处理数据记录表单
                 if (formId && formId.includes('-form') && !formId.includes('edit')) {
                     let recordType, newRecord;
-                    let apiType, apiValue, apiUnit, apiNotes;
                     
                     // 根据表单类型创建新记录
                     if (formId === 'bg-form') {
@@ -4248,11 +3529,6 @@ const weekNumber = Math.ceil(now.getDate() / 7);
                         }
                         
                         recordType = 'blood-glucose';
-                        apiType = 'bloodGlucose';
-                        apiValue = value;
-                        apiUnit = 'mg/dL';
-                        apiNotes = `测量时间: ${time} ${notes ? ', ' + notes : ''}`;
-                        
                         newRecord = {
                             id: Date.now().toString(),
                             value: value,
@@ -4272,11 +3548,6 @@ const weekNumber = Math.ceil(now.getDate() / 7);
                         }
                          
                         recordType = 'diet';
-                        apiType = 'diet';
-                        apiValue = carbs;
-                        apiUnit = 'g';
-                        apiNotes = `餐次: ${meal}, 用餐时间: ${time}, 内容: ${content}`;
-                        
                         newRecord = {
                             id: Date.now().toString(),
                             meal: meal,
@@ -4297,11 +3568,6 @@ const weekNumber = Math.ceil(now.getDate() / 7);
                         }
                         
                         recordType = 'exercise';
-                        apiType = 'exercise';
-                        apiValue = duration;
-                        apiUnit = '分钟';
-                        apiNotes = `运动类型: ${type}, 运动时间: ${time} ${notes ? ', ' + notes : ''}`;
-                        
                         newRecord = {
                             id: Date.now().toString(),
                             type: type,
@@ -4322,11 +3588,6 @@ const weekNumber = Math.ceil(now.getDate() / 7);
                         }
                         
                         recordType = 'medication';
-                        apiType = 'medication';
-                        apiValue = dose;
-                        apiUnit = '';
-                        apiNotes = `药物名称: ${name}, 用药时间: ${time} ${notes ? ', ' + notes : ''}`;
-                        
                         newRecord = {
                             id: Date.now().toString(),
                             name: name,
@@ -4336,55 +3597,34 @@ const weekNumber = Math.ceil(now.getDate() / 7);
                         };
                     }
                     
-                    // 将新记录保存到后端数据库
+                    // 将新记录添加到数据中
                     if (recordType && newRecord) {
-                        try {
-                            // 获取当前用户ID
-                            const userId = window.apiClient.getCurrentUserId();
-                            
-                            // 调用后端API保存数据
-                            const result = await window.apiClient.saveHealthData(
-                                userId, 
-                                apiType, 
-                                apiValue, 
-                                apiUnit, 
-                                apiNotes
-                            );
-                            
-                            if (result.success) {
-                                // 同时保存到localStorage用于前端显示
-                                let dataKey;
-                                if (recordType === 'blood-glucose') {
-                                    dataKey = 'bloodglucose';
-                                } else {
-                                    dataKey = recordType.replace('-', '');
-                                }
-                                
-                                // 确保数据数组已初始化
-                                if (!window.sampleData[dataKey]) {
-                                    window.sampleData[dataKey] = [];
-                                }
-                                
-                                // 添加新记录到前端数据
-                                window.sampleData[dataKey].push(newRecord);
-                                // 保存数据到localStorage
-                                saveSampleData();
-                                
-                                // 重置表单
-                                this.reset();
-                                
-                                // 重新渲染记录
-                                renderRecords(recordType);
-                                
-                                // 显示成功提示
-                                alert('记录添加成功！数据已保存到数据库。');
-                            } else {
-                                throw new Error(result.message || '保存失败');
-                            }
-                        } catch (error) {
-                            console.error('保存数据失败:', error);
-                            alert('保存数据失败，请检查网络连接或稍后重试。错误信息: ' + error.message);
+                        let dataKey;
+                        if (recordType === 'blood-glucose') {
+                            dataKey = 'bloodglucose';
+                        } else {
+                            dataKey = recordType.replace('-', '');
                         }
+                        
+                        // 确保数据数组已初始化
+                        if (!window.sampleData[dataKey]) {
+                            window.sampleData[dataKey] = [];
+                        }
+                        
+                        // 添加新记录
+                        window.sampleData[dataKey].push(newRecord);
+                        
+                        // 保存数据到localStorage
+                        saveSampleData();
+                        
+                        // 重置表单
+                        this.reset();
+                        
+                        // 重新渲染记录
+                        renderRecords(recordType);
+                        
+                        // 显示成功提示
+                        alert('记录添加成功！');
                     }
                 } else if (formId === 'login-form' || formId === 'register-form') {
                     // 处理登录和注册表单（保持原有逻辑）
@@ -4871,7 +4111,7 @@ const weekNumber = Math.ceil(now.getDate() / 7);
             },
             {
                 id: '3',
-title: '分享我的控糖经验',
+                title: '分享我的控糖经验',
                 content: '经过半年的努力，我的糖化血红蛋白从8.5%降到了6.2%。主要经验是：规律作息、合理饮食、适量运动、定期监测血糖。希望能帮助到大家！',
                 author: '控糖达人老王',
                 date: '2023-12-15',
@@ -5160,172 +4400,6 @@ title: '分享我的控糖经验',
         });
     </script>
     <script>
-            // 食物糖量数据页面功能
-        function initFoodSugarPage() {
-            // 初始化饼图
-            initMealChart();
-            
-            // 绑定搜索功能
-            bindSearchFunctionality();
-            
-            // 绑定分类筛选功能
-            bindCategoryFilter();
-        }
-        
-        // 初始化每餐推荐摄入比例饼图
-        function initMealChart() {
-            const ctx = document.getElementById('meal-chart').getContext('2d');
-            
-            // 模拟饼图数据
-            const data = {
-                labels: ['蔬菜', '主食', '肉类'],
-                datasets: [{
-                    data: [50, 30, 20],
-                    backgroundColor: ['#4CAF50', '#FF9800', '#F44336'],
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                }]
-            };
-            
-            const options = {
-                responsive: false,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.label || '';
-                                const value = context.raw || 0;
-                                return `${label}: ${value}%`;
-                            }
-                        }
-                    }
-                }
-            };
-            
-            // 创建饼图
-            new Chart(ctx, {
-                type: 'pie',
-                data: data,
-                options: options
-            });
-        }
-        
-        // 绑定搜索功能
-        function bindSearchFunctionality() {
-            const searchInput = document.getElementById('food-search-input');
-            const searchBtn = document.getElementById('search-btn');
-            const resetBtn = document.getElementById('reset-search');
-            
-            searchBtn.addEventListener('click', performSearch);
-            resetBtn.addEventListener('click', resetSearch);
-            
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    performSearch();
-                }
-            });
-        }
-        
-        // 执行搜索
-        function performSearch() {
-            const searchTerm = document.getElementById('food-search-input').value.trim().toLowerCase();
-            const foodItems = document.querySelectorAll('.food-item');
-            
-            if (searchTerm === '') {
-                alert('请输入要搜索的食物名称');
-                return;
-            }
-            
-            let found = false;
-            foodItems.forEach(item => {
-                const foodName = item.querySelector('h4').textContent.toLowerCase();
-                if (foodName.includes(searchTerm)) {
-                    item.style.display = 'block';
-                    found = true;
-                    // 添加高亮效果
-                    item.style.boxShadow = '0 0 0 3px #4CAF50';
-                    setTimeout(() => {
-                        item.style.boxShadow = '';
-                    }, 2000);
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-            
-            if (!found) {
-                alert(`未找到包含"${searchTerm}"的食物`);
-                // 显示所有食物
-                resetSearch();
-            }
-        }
-        
-        // 重置搜索
-        function resetSearch() {
-            document.getElementById('food-search-input').value = '';
-            const foodItems = document.querySelectorAll('.food-item');
-            const categoryBtns = document.querySelectorAll('.category-btn');
-            
-            // 显示所有食物
-            foodItems.forEach(item => {
-                item.style.display = 'block';
-            });
-            
-            // 重置分类按钮状态
-            categoryBtns.forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.category === 'all') {
-                    btn.classList.add('active');
-                }
-            });
-        }
-        
-        // 绑定分类筛选功能
-        function bindCategoryFilter() {
-            const categoryBtns = document.querySelectorAll('.category-btn');
-            
-            categoryBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    // 更新按钮状态
-                    categoryBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // 筛选食物
-                    const category = this.dataset.category;
-                    filterFoodByCategory(category);
-                });
-            });
-        }
-        
-        // 按分类筛选食物
-        function filterFoodByCategory(category) {
-            const foodItems = document.querySelectorAll('.food-item');
-            
-            foodItems.forEach(item => {
-                if (category === 'all' || item.dataset.category === category) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-        
-        // 页面加载完成后初始化食物糖量数据页面
-        document.addEventListener('DOMContentLoaded', function() {
-            // 监听食物糖量数据页面的显示
-            const foodSugarBtn = document.getElementById('food-sugar-btn');
-            if (foodSugarBtn) {
-                foodSugarBtn.addEventListener('click', function() {
-                    // 延迟初始化以确保页面已显示
-                    setTimeout(initFoodSugarPage, 100);
-                });
-            }
-        });
-        
-
         // DeepSeek API配置
         const DEEPSEEK_CONFIG = {
             apiKey: 'sk-7af4884770034015a37a0ae720b216f6',
@@ -5636,8 +4710,6 @@ title: '分享我的控糖经验',
                 <li><strong>定时定量</strong>：规律进食，避免暴饮暴食</li>
                 <li><strong>选择低GI食物</strong>：优先选择升糖指数低的食物</li>
             </ul>
-            <!-- 在图片标签中添加错误处理 -->
-            <img src="images/blood-sugar-trend.jpg" alt="血糖趋势图" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmNWY1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5OTkiPuWKoOi9veWbvuWDj+WkmumUmeivr+WbvuWDjzwvdGV4dD48L3N2Zz4='; this.alt='血糖趋势图（图片加载失败）'">
             <h3>推荐食物</h3>
             <p>全谷物、蔬菜、豆类、瘦肉、鱼类等...</p>
         `,
@@ -6001,7 +5073,7 @@ title: '分享我的控糖经验',
                 
                 if (newsList.length === 0) {
                     manageContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 40px 0;">您还没有发布任何资讯</p>';
-return;
+                    return;
                 }
                 
                 manageContainer.innerHTML = '';
@@ -6025,7 +5097,7 @@ return;
                         </div>
                         <div class="community-actions">
                             <div class="community-action">
-<i>👍</i> 点赞 (${news.likes || 0})
+                                <i>👍</i> 点赞 (${news.likes || 0})
                             </div>
                             <div class="community-action">
                                 <i>💬</i> 评论 (${news.comments || 0})
@@ -6287,7 +5359,7 @@ return;
             }
         });
         
-        // 加载AI分析报告 - 修复：避免使用模拟数据
+        // 加载AI分析报告
         async function loadAIReport(userId, period) {
             try {
                 // 显示加载状态
@@ -6299,8 +5371,8 @@ return;
                 
                 reportContent.innerHTML = '<div style="text-align: center; padding: 40px;">正在生成' + (period === 'week' ? '周报' : '月报') + '...</div>';
                 
-                // 调用API获取报告 - 使用正确的方法名
-                const report = await window.apiClient.getAIReport(userId, period);
+                // 调用API获取报告
+                const report = await window.apiClient.generateAIReport(userId, period);
                 
                 // 渲染报告内容
                 if (report && report.success && report.data) {
@@ -6316,14 +5388,9 @@ return;
                         }
                     } catch (transformError) {
                         console.error('转换报告数据失败:', transformError);
-                        // 不再使用模拟数据，而是显示错误信息
-                        reportContent.innerHTML = `
-                            <div style="text-align: center; padding: 40px; color: #ff6b6b;">
-                                <h3>报告生成失败</h3>
-                                <p>数据转换过程中出现错误，请稍后重试。</p>
-                                <p>错误详情：${transformError.message}</p>
-                            </div>
-                        `;
+                        // 使用模拟数据
+                        const mockReport = generateMockReport(period);
+                        renderReport(mockReport, period);
                     }
                 } else {
                     throw new Error('获取报告失败: ' + (report ? report.message : '未知错误'));
@@ -6331,24 +5398,16 @@ return;
             } catch (error) {
                 console.error('加载AI报告失败:', error);
                 
-                // 加载失败时显示错误消息，不再使用模拟数据
+                // 加载失败时显示错误消息和模拟数据
                 const containerId = period === 'week' ? 'weekly-report' : 'monthly-report';
                 const reportContainer = document.getElementById(containerId);
-                const reportContent = reportContainer.querySelector('.report-container');
                 
-                reportContent.innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: #ff6b6b;">
-                        <h3>报告加载失败</h3>
-                        <p>无法获取您的健康数据报告，请检查网络连接后重试。</p>
-                        <p>错误详情：${error.message}</p>
-                        <button onclick="loadAIReport('${userId}', '${period}')" style="margin-top: 20px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                            重新加载报告
-                        </button>
-                    </div>
-                `;
+                // 使用模拟数据
+                const mockReport = generateMockReport(period);
+                renderReport(mockReport, period);
                 
-                // 不再显示模拟数据警告
-                console.warn('AI报告加载失败，已禁用模拟数据回退功能');
+                // 显示错误提示
+                alert('报告加载失败，显示模拟数据。请检查网络连接后重试。');
             }
         }
         
@@ -6613,6 +5672,7 @@ return;
                     '您的运动习惯良好，继续保持每周至少150分钟中等强度运动'
                 ];
                 renderRecommendations(mockRecommendations);
+                
                 alert('建议加载失败，显示模拟数据。请检查网络连接后重试。');
             }
         }
@@ -6636,6 +5696,7 @@ return;
             
             if (healthData.exercise && healthData.exercise.length > 0) {
                 const exerciseDays = new Set(healthData.exercise.map(record => new Date(record.date).toDateString())).size;
+                
                 if (exerciseDays < 3) {
                     recommendations.push('建议每周至少进行150分钟中等强度的有氧运动，如快走、游泳或骑自行车。');
                 }
@@ -6792,6 +5853,185 @@ return;
             alert(`准备打印${period === 'week' ? '周' : '月'}报...`);
             // 实际应用中这里可以实现报告的打印逻辑
         }
+        
+        // 初始化每餐摄入比例图表
+        function initMealRatioChart() {
+            if (typeof Chart !== 'undefined') {
+                const mealRatioCtx = document.getElementById('mealRatioChart');
+                if (mealRatioCtx) {
+                    // 销毁已存在的图表实例，避免重复创建
+                    const existingChart = Chart.getChart(mealRatioCtx);
+                    if (existingChart) {
+                        existingChart.destroy();
+                    }
+                    
+                    // 创建新的饼图
+                    new Chart(mealRatioCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['蔬菜', '主食', '肉类'],
+                            datasets: [{
+                                data: [50, 30, 20],
+                                backgroundColor: ['#52c41a', '#faad14', '#f5222d'],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '70%',
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return context.label + ': ' + context.parsed + '%';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }
+        
+        // 为食物糖量数据导航按钮添加点击时初始化图表的功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取食物糖量数据导航按钮
+            const foodSugarNavBtn = document.getElementById('food-sugar-btn');
+            
+            if (foodSugarNavBtn) {
+                // 保存原始的点击事件处理函数
+                const originalClickHandler = foodSugarNavBtn.onclick;
+                
+                // 重新定义点击事件处理函数
+                foodSugarNavBtn.addEventListener('click', function() {
+                    // 延迟初始化图表，确保内容区域已显示
+                    setTimeout(initMealRatioChart, 100);
+                });
+            }
+            
+            // 当页面直接加载到food-sugar部分时也初始化图表
+                if (window.location.hash === '#food-sugar' || window.location.pathname.includes('tangyu.html') && document.getElementById('food-sugar').style.display !== 'none') {
+                    initMealRatioChart();
+                }
+            });
+            
+            // 食物搜索和分类功能
+            document.addEventListener('DOMContentLoaded', function() {
+                // 获取DOM元素
+                const searchInput = document.getElementById('food-search-input');
+                const searchBtn = document.getElementById('food-search-btn');
+                const resetBtn = document.getElementById('food-reset-btn');
+                const categoryBtns = document.querySelectorAll('.food-category-btn');
+                const foodItems = document.querySelectorAll('.food-item');
+                
+                // 搜索功能
+                function handleSearch() {
+                    const searchTerm = searchInput.value.toLowerCase().trim();
+                    filterFoodItems(searchTerm, getActiveCategory());
+                }
+                
+                // 分类功能
+                function handleCategoryClick(event) {
+                    // 更新分类按钮样式
+                    categoryBtns.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.style.backgroundColor = '#f0f0f0';
+                        btn.style.color = 'var(--secondary-color)';
+                    });
+                    
+                    event.currentTarget.classList.add('active');
+                    event.currentTarget.style.backgroundColor = 'var(--primary-color)';
+                    event.currentTarget.style.color = 'white';
+                    
+                    // 过滤食物项
+                    const activeCategory = getActiveCategory();
+                    filterFoodItems(searchInput.value.toLowerCase().trim(), activeCategory);
+                }
+                
+                // 重置功能
+                function handleReset() {
+                    searchInput.value = '';
+                    
+                    // 重置分类按钮
+                    categoryBtns.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.style.backgroundColor = '#f0f0f0';
+                        btn.style.color = 'var(--secondary-color)';
+                    });
+                    
+                    // 激活"全部"按钮
+                    const allBtn = document.querySelector('.food-category-btn[data-category="all"]');
+                    if (allBtn) {
+                        allBtn.classList.add('active');
+                        allBtn.style.backgroundColor = 'var(--primary-color)';
+                        allBtn.style.color = 'white';
+                    }
+                    
+                    // 显示所有食物项
+                    foodItems.forEach(item => {
+                        item.style.display = 'block';
+                    });
+                }
+                
+                // 获取当前激活的分类
+                function getActiveCategory() {
+                    const activeBtn = document.querySelector('.food-category-btn.active');
+                    return activeBtn ? activeBtn.dataset.category : 'all';
+                }
+                
+                // 过滤食物项
+                function filterFoodItems(searchTerm, category) {
+                    foodItems.forEach(item => {
+                        const foodName = item.querySelector('h4').textContent.toLowerCase();
+                        const itemCategory = item.dataset.category;
+                        const itemGi = item.dataset.gi;
+                        
+                        // 搜索匹配
+                        const matchesSearch = searchTerm === '' || foodName.includes(searchTerm);
+                        
+                        // 分类匹配
+                        let matchesCategory = true;
+                        if (category !== 'all') {
+                            if (category === 'high-gi') {
+                                matchesCategory = itemGi === 'high';
+                            } else if (category === 'low-gi') {
+                                matchesCategory = itemGi === 'low';
+                            } else {
+                                matchesCategory = itemCategory === category;
+                            }
+                        }
+                        
+                        // 显示或隐藏食物项
+                        item.style.display = (matchesSearch && matchesCategory) ? 'block' : 'none';
+                    });
+                }
+                
+                // 添加事件监听器
+                if (searchBtn) {
+                    searchBtn.addEventListener('click', handleSearch);
+                }
+                
+                if (searchInput) {
+                    searchInput.addEventListener('keypress', function(event) {
+                        if (event.key === 'Enter') {
+                            handleSearch();
+                        }
+                    });
+                }
+                
+                if (resetBtn) {
+                    resetBtn.addEventListener('click', handleReset);
+                }
+                
+                categoryBtns.forEach(btn => {
+                    btn.addEventListener('click', handleCategoryClick);
+                });
+            });
 </script>
     <script src="testReportInit.js"></script>
 </body>
