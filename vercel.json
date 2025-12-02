@@ -9,8 +9,7 @@
       "src": "/(.*\\.(js|css|html|jpg|jpeg|png|gif|ico|svg|txt|xml))",
       "headers": {
         "Cache-Control": "public, max-age=3600"
-      },
-      "dest": "/$1"
+      }
     },
     {
       "src": "/favicon.ico",
