@@ -1,2 +1,0 @@
-
-8706f1c055b248df939508be9066cfea9ce0ace0	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/resolve-alpn","integrity":null,"time":1761212212939,"size":"262","metadata":{"time":1761212212939,"url":"http://registry.npm.taobao.org/resolve-alpn","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Thu, 23 Oct 2025 09:36:53 GMT","location":"https://registry.npmmirror.com/resolve-alpn"},"options":{"compress":true},"status":301}}

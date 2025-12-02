@@ -1,2 +1,0 @@
-
-e00a768a0b400f830f215fd01e7d411bf073ee09	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/http2-wrapper","integrity":null,"time":1761212211837,"size":"262","metadata":{"time":1761212211837,"url":"http://registry.npm.taobao.org/http2-wrapper","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Thu, 23 Oct 2025 09:36:52 GMT","location":"https://registry.npmmirror.com/http2-wrapper"},"options":{"compress":true},"status":301}}

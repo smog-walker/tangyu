@@ -1,2 +1,0 @@
-
-052f6dfd001ff8b8063bd20addf5bdbc56ac6bf3	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/binary-extensions","integrity":null,"time":1760193356349,"size":"262","metadata":{"time":1760193356348,"url":"http://registry.npm.taobao.org/binary-extensions","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Sat, 11 Oct 2025 14:35:56 GMT","location":"https://registry.npmmirror.com/binary-extensions"},"options":{"compress":true},"status":301}}

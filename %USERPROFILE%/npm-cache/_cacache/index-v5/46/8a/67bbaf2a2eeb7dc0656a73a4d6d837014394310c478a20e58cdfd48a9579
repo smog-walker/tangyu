@@ -1,2 +1,0 @@
-
-23a2ed05b9f9b0b68e35b101d4b3032ea8c50d0c	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/depd","integrity":null,"time":1760193354868,"size":"262","metadata":{"time":1760193354868,"url":"http://registry.npm.taobao.org/depd","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Sat, 11 Oct 2025 14:35:54 GMT","location":"https://registry.npmmirror.com/depd"},"options":{"compress":true},"status":301}}

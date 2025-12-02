@@ -1,2 +1,0 @@
-
-0b2ede6fe37b62a4f90fd637299eadc5e3325b47	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/dunder-proto","integrity":null,"time":1760193357300,"size":"262","metadata":{"time":1760193357300,"url":"http://registry.npm.taobao.org/dunder-proto","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Sat, 11 Oct 2025 14:35:56 GMT","location":"https://registry.npmmirror.com/dunder-proto"},"options":{"compress":true},"status":301}}

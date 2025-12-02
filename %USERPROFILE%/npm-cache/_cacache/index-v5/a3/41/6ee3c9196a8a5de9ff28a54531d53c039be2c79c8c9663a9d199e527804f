@@ -1,2 +1,0 @@
-
-0e86326c9a8c95f2f54f88232a5fd35050db3ba1	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/hpagent","integrity":null,"time":1761212211519,"size":"262","metadata":{"time":1761212211519,"url":"http://registry.npm.taobao.org/hpagent","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Thu, 23 Oct 2025 09:36:51 GMT","location":"https://registry.npmmirror.com/hpagent"},"options":{"compress":true},"status":301}}

@@ -1,2 +1,0 @@
-
-c007ed4909db22ba83cf2c99bd7177d91ec3c27f	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/@sindresorhus%2fis","integrity":null,"time":1761212211803,"size":"262","metadata":{"time":1761212211803,"url":"http://registry.npm.taobao.org/@sindresorhus%2fis","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Thu, 23 Oct 2025 09:36:52 GMT","location":"https://registry.npmmirror.com/@sindresorhus%2fis"},"options":{"compress":true},"status":301}}

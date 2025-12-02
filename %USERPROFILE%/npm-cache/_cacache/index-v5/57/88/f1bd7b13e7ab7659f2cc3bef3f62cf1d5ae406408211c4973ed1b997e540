@@ -1,2 +1,0 @@
-
-7290a407c1407947ff6ce08f41d0dd7767f5ddcb	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/yauzl","integrity":null,"time":1761212211802,"size":"262","metadata":{"time":1761212211802,"url":"http://registry.npm.taobao.org/yauzl","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Thu, 23 Oct 2025 09:36:52 GMT","location":"https://registry.npmmirror.com/yauzl"},"options":{"compress":true},"status":301}}

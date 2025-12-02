@@ -1,2 +1,0 @@
-
-1ded85649073f62eb528c1ae2ffdd68965797de9	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/decompress-response","integrity":null,"time":1761212211838,"size":"262","metadata":{"time":1761212211838,"url":"http://registry.npm.taobao.org/decompress-response","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Thu, 23 Oct 2025 09:36:52 GMT","location":"https://registry.npmmirror.com/decompress-response"},"options":{"compress":true},"status":301}}

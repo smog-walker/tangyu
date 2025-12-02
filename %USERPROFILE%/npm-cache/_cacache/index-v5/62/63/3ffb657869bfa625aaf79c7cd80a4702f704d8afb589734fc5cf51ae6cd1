@@ -1,2 +1,0 @@
-
-3055fdf6c703f96156e13f0e8b8730c38754f423	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/extract-zip","integrity":null,"time":1761212211491,"size":"262","metadata":{"time":1761212211491,"url":"http://registry.npm.taobao.org/extract-zip","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Thu, 23 Oct 2025 09:36:51 GMT","location":"https://registry.npmmirror.com/extract-zip"},"options":{"compress":true},"status":301}}

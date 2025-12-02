@@ -1,2 +1,0 @@
-
-f5879b0341b343e4550da3f8b5b02447f032eb25	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/es-object-atoms","integrity":null,"time":1760193357166,"size":"262","metadata":{"time":1760193357166,"url":"http://registry.npm.taobao.org/es-object-atoms","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Sat, 11 Oct 2025 14:35:56 GMT","location":"https://registry.npmmirror.com/es-object-atoms"},"options":{"compress":true},"status":301}}

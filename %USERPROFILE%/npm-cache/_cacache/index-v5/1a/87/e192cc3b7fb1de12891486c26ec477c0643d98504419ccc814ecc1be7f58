@@ -1,2 +1,0 @@
-
-064cea1ecae9cd4c44290386774dcc896d63bb7e	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/uuid","integrity":null,"time":1761212211520,"size":"262","metadata":{"time":1761212211520,"url":"http://registry.npm.taobao.org/uuid","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Thu, 23 Oct 2025 09:36:51 GMT","location":"https://registry.npmmirror.com/uuid"},"options":{"compress":true},"status":301}}

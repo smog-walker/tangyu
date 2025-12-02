@@ -1,2 +1,0 @@
-
-4ec16ef75a098385039e0adb46d2d3434623b488	{"key":"make-fetch-happen:request-cache:http://registry.npm.taobao.org/defer-to-connect","integrity":null,"time":1761212212882,"size":"262","metadata":{"time":1761212212882,"url":"http://registry.npm.taobao.org/defer-to-connect","reqHeaders":{"accept":"application/json"},"resHeaders":{"content-type":"text/html","date":"Thu, 23 Oct 2025 09:36:53 GMT","location":"https://registry.npmmirror.com/defer-to-connect"},"options":{"compress":true},"status":301}}
