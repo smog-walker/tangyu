@@ -6,7 +6,19 @@
       "use": "@vercel/node"
     },
     {
-      "src": "public/**",
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "image/**",
       "use": "@vercel/static"
     }
   ],
@@ -16,19 +28,26 @@
       "dest": "/server.js"
     },
     {
-      "src": "/(.*\\.(js|css|html|jpg|jpeg|png|gif|ico|svg|txt|xml|woff|woff2|ttf|eot))",
+      "src": "/(.*\\.(html|css|js))",
       "headers": {
-        "Cache-Control": "public, max-age=3600, s-maxage=3600"
+        "Cache-Control": "public, max-age=3600"
       },
-      "dest": "/public/$1"
+      "dest": "/$1"
+    },
+    {
+      "src": "/image/(.*)",
+      "headers": {
+        "Cache-Control": "public, max-age=86400"
+      },
+      "dest": "/image/$1"
     },
     {
       "src": "/favicon\\.ico",
-      "dest": "/public/images/my-small1.jpg"
+      "dest": "/image/my-small1.jpg"
     },
     {
-      "src": "/favicon\\.png", 
-      "dest": "/public/images/my-small1.jpg"
+      "src": "/favicon\\.png",
+      "dest": "/image/my-small1.jpg"
     },
     {
       "src": "/(.*)",
@@ -41,59 +60,24 @@
       "memory": 1024
     }
   },
-  "rewrites": [
+  "headers": [
     {
-      "source": "/(.*)",
-      "destination": "/server.js"
-    }
-  ]
-}{
-  "version": 2,
-  "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
+      "source": "/(.*)\\.(js|css|html)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
+      ]
     },
     {
-      "src": "public/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/(.*\\.(js|css|html|jpg|jpeg|png|gif|ico|svg|txt|xml|woff|woff2|ttf|eot))",
-      "headers": {
-        "Cache-Control": "public, max-age=3600, s-maxage=3600"
-      },
-      "dest": "/public/$1"
-    },
-    {
-      "src": "/favicon\\.ico",
-      "dest": "/public/images/my-small1.jpg"
-    },
-    {
-      "src": "/favicon\\.png", 
-      "dest": "/public/images/my-small1.jpg"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/server.js"
-    }
-  ],
-  "functions": {
-    "server.js": {
-      "maxDuration": 30,
-      "memory": 1024
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/server.js"
+      "source": "/image/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
     }
   ]
 }
