@@ -5,15 +5,5 @@
       "memory": 1024,
       "maxDuration": 30
     }
-  },
-  "routes": [
-    {
-      "src": "/(api|server\\.js)(/.*)?",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/(.*)\\.([a-zA-Z0-9]+)$",
-      "continue": true
-    }
-  ]
+  }
 }
