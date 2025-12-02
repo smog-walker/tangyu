@@ -4,22 +4,35 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "images/*",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
-    {
-      "src": "/(.*\\.(js|css|html|jpg|jpeg|png|gif|ico|svg))$",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      }
-    },
     {
       "src": "/api/(.*)",
       "dest": "/server.js"
     },
     {
+      "src": "/(.*\\.(html|js|css|jpg|jpeg|png|gif|ico|svg))",
+      "dest": "/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/server.js"
     }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }
