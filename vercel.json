@@ -9,7 +9,41 @@
       "src": "/(.*\\.(js|css|html|jpg|jpeg|png|gif|ico|svg|txt|xml))",
       "headers": {
         "Cache-Control": "public, max-age=3600"
-      }
+      },
+      "dest": "/$1"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/images/my-small1.jpg"
+    },
+    {
+      "src": "/favicon.png", 
+      "dest": "/images/my-small1.jpg"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/server.js"
+    }
+  ],
+  "functions": {
+    "server.js": {
+      "maxDuration": 30,
+      "memory": 1024
+    }
+  }
+}{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/(.*\\.(js|css|html|jpg|jpeg|png|gif|ico|svg|txt|xml))",
+      "headers": {
+        "Cache-Control": "public, max-age=3600"
+      },
+      "dest": "/$1"
     },
     {
       "src": "/favicon.ico",
