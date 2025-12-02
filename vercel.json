@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "public": true,
   "functions": {
     "server.js": {
       "memory": 1024,
@@ -8,7 +7,13 @@
     }
   },
   "routes": [
-    { "src": "/api/(.*)", "dest": "/server.js" },
-    { "src": "/(.*)", "dest": "/server.js" }
+    {
+      "src": "/(api|server\\.js)(/.*)?",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/(.*)\\.([a-zA-Z0-9]+)$",
+      "continue": true
+    }
   ]
 }
